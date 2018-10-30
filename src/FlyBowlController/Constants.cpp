@@ -40,6 +40,7 @@ const bool fly_bowls_enabled_element_default = true;
 // Function
 CONSTANT_STRING(set_ir_backlights_on_at_power_function_name,"setIrBacklightsOnAtPower");
 CONSTANT_STRING(set_visible_backlights_on_at_power_function_name,"setVisibleBacklightsOnAtPower");
+CONSTANT_STRING(add_visible_backlights_pwm_function_name,"addVisibleBacklightsPwm");
 
 // Callbacks
 CONSTANT_STRING(set_ir_backlights_on_callback_name,"setIrBacklightsOn");

@@ -18,7 +18,7 @@ namespace constants
 //MAX values must be >= 1, >= created/copied count, < RAM limit
 enum{PROPERTY_COUNT_MAX=1};
 enum{PARAMETER_COUNT_MAX=1};
-enum{FUNCTION_COUNT_MAX=2};
+enum{FUNCTION_COUNT_MAX=3};
 enum{CALLBACK_COUNT_MAX=4};
 
 extern ConstantString device_name;
@@ -43,6 +43,7 @@ extern const bool fly_bowls_enabled_element_default;
 // Function
 extern ConstantString set_ir_backlights_on_at_power_function_name;
 extern ConstantString set_visible_backlights_on_at_power_function_name;
+extern ConstantString add_visible_backlights_pwm_function_name;
 
 // Callbacks
 extern ConstantString set_ir_backlights_on_callback_name;

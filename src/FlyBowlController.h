@@ -44,6 +44,12 @@ public:
   void setVisibleBacklightsOn();
   void setVisibleBacklightsOff();
 
+  int addVisibleBacklightsPwm(long power,
+    long delay,
+    long period,
+    long on_duration,
+    long count);
+
 private:
   modular_server::Property properties_[fly_bowl_controller::constants::PROPERTY_COUNT_MAX];
   modular_server::Parameter parameters_[fly_bowl_controller::constants::PARAMETER_COUNT_MAX];
@@ -66,6 +72,12 @@ private:
   void setVisibleBacklightsOnAtPowerHandler();
   void setVisibleBacklightsOnHandler(modular_server::Pin * pin_ptr);
   void setVisibleBacklightsOffHandler(modular_server::Pin * pin_ptr);
+  void addVisibleBacklightsPwmHandler();
+
+  void startVisibleBacklightsPwmHandler(int pwm_index);
+  void stopVisibleBacklightsPwmHandler(int pwm_index);
+  void setVisibleBacklightsOnAtPowerHandler(int pwm_index);
+  void setVisibleBacklightsOffHandler(int pwm_index);
 
 };
 

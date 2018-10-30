@@ -48,6 +48,14 @@ void FlyBowlController::setup()
   // Parameters
   modular_server::Parameter & power_parameter = modular_server_.parameter(digital_controller::constants::power_parameter_name);
 
+  modular_server::Parameter & delay_parameter = modular_server_.parameter(digital_controller::constants::delay_parameter_name);
+
+  modular_server::Parameter & period_parameter = modular_server_.parameter(digital_controller::constants::period_parameter_name);
+
+  modular_server::Parameter & on_duration_parameter = modular_server_.parameter(digital_controller::constants::on_duration_parameter_name);
+
+  modular_server::Parameter & count_parameter = modular_server_.parameter(digital_controller::constants::count_parameter_name);
+
   // Functions
   modular_server::Function & set_ir_backlights_on_at_power_function = modular_server_.createFunction(fly_bowl_controller::constants::set_ir_backlights_on_at_power_function_name);
   set_ir_backlights_on_at_power_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&FlyBowlController::setIrBacklightsOnAtPowerHandler));
@@ -56,6 +64,14 @@ void FlyBowlController::setup()
   modular_server::Function & set_visible_backlights_on_at_power_function = modular_server_.createFunction(fly_bowl_controller::constants::set_visible_backlights_on_at_power_function_name);
   set_visible_backlights_on_at_power_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&FlyBowlController::setVisibleBacklightsOnAtPowerHandler));
   set_visible_backlights_on_at_power_function.addParameter(power_parameter);
+
+  modular_server::Function & add_visible_backlights_pwm_function = modular_server_.createFunction(fly_bowl_controller::constants::add_visible_backlights_pwm_function_name);
+  add_visible_backlights_pwm_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&FlyBowlController::addVisibleBacklightsPwmHandler));
+  add_visible_backlights_pwm_function.addParameter(power_parameter);
+  add_visible_backlights_pwm_function.addParameter(delay_parameter);
+  add_visible_backlights_pwm_function.addParameter(period_parameter);
+  add_visible_backlights_pwm_function.addParameter(on_duration_parameter);
+  add_visible_backlights_pwm_function.addParameter(count_parameter);
 
   // Callbacks
   modular_server::Callback & set_ir_backlights_on_callback = modular_server_.createCallback(fly_bowl_controller::constants::set_ir_backlights_on_callback_name);
@@ -216,6 +232,31 @@ void FlyBowlController::setVisibleBacklightsOff()
   }
 }
 
+int FlyBowlController::addVisibleBacklightsPwm(long power,
+    long delay,
+    long period,
+    long on_duration,
+    long count)
+{
+  uint32_t channels = 0;
+  uint32_t bit = 1;
+  size_t channel;
+  size_t fly_bowl_visible_backlight;
+  for (size_t fly_bowl=0; fly_bowl<getFlyBowlCount(); ++fly_bowl)
+  {
+    fly_bowl_visible_backlight = constants::fly_bowl_visible_backlights[fly_bowl];
+    channel = visibleBacklightToDigitalChannel(fly_bowl_visible_backlight);
+    channels |= (bit << channel);
+  }
+  int pwm_index = addPwm(channels,
+    power,
+    delay,
+    period,
+    on_duration,
+    count);
+  return pwm_index;
+}
+
 size_t FlyBowlController::getFlyBowlCount()
 {
   return constants::FLY_BOWL_COUNT;
@@ -306,4 +347,18 @@ void FlyBowlController::setVisibleBacklightsOnHandler(modular_server::Pin * pin_
 void FlyBowlController::setVisibleBacklightsOffHandler(modular_server::Pin * pin_ptr)
 {
   setVisibleBacklightsOff();
+}
+
+void FlyBowlController::addVisibleBacklightsPwmHandler()
+{
+  long power;
+  modular_server_.parameter(digital_controller::constants::power_parameter_name).getValue(power);
+  long delay;
+  modular_server_.parameter(digital_controller::constants::delay_parameter_name).getValue(delay);
+  long period;
+  modular_server_.parameter(digital_controller::constants::period_parameter_name).getValue(period);
+  long on_duration;
+  modular_server_.parameter(digital_controller::constants::on_duration_parameter_name).getValue(on_duration);
+  long count;
+  modular_server_.parameter(digital_controller::constants::count_parameter_name).getValue(count);
 }
