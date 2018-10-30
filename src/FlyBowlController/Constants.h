@@ -18,13 +18,16 @@ namespace constants
 //MAX values must be >= 1, >= created/copied count, < RAM limit
 enum{PROPERTY_COUNT_MAX=1};
 enum{PARAMETER_COUNT_MAX=1};
-enum{FUNCTION_COUNT_MAX=1};
-enum{CALLBACK_COUNT_MAX=1};
+enum{FUNCTION_COUNT_MAX=2};
+enum{CALLBACK_COUNT_MAX=4};
 
 extern ConstantString device_name;
 
 extern ConstantString firmware_name;
 extern const modular_server::FirmwareInfo firmware_info;
+
+extern const long fan_power_min;
+extern const long fan_power_max;
 
 // Pins
 
@@ -32,12 +35,20 @@ extern const modular_server::FirmwareInfo firmware_info;
 
 // Properties
 // Property values must be long, double, bool, long[], double[], bool[], char[], ConstantString *, (ConstantString *)[]
+extern ConstantString fly_bowls_enabled_property_name;
+extern const bool fly_bowls_enabled_element_default;
 
 // Parameters
 
-// Functions
+// Function
+extern ConstantString set_ir_backlights_on_at_power_function_name;
+extern ConstantString set_visible_backlights_on_at_power_function_name;
 
 // Callbacks
+extern ConstantString set_ir_backlights_on_callback_name;
+extern ConstantString set_ir_backlights_off_callback_name;
+extern ConstantString set_visible_backlights_on_callback_name;
+extern ConstantString set_visible_backlights_off_callback_name;
 
 // Errors
 }

@@ -28,13 +28,44 @@ public:
   FlyBowlController();
   virtual void setup();
 
+  void setIrBacklightOnAtPower(size_t fly_bowl,
+    long power);
+  void setIrBacklightOn(size_t fly_bowl);
+  void setIrBacklightOff(size_t fly_bowl);
+  void setIrBacklightsOnAtPower(long power);
+  void setIrBacklightsOn();
+  void setIrBacklightsOff();
+
+  void setVisibleBacklightOnAtPower(size_t fly_bowl,
+    long power);
+  void setVisibleBacklightOn(size_t fly_bowl);
+  void setVisibleBacklightOff(size_t fly_bowl);
+  void setVisibleBacklightsOnAtPower(long power);
+  void setVisibleBacklightsOn();
+  void setVisibleBacklightsOff();
+
 private:
   modular_server::Property properties_[fly_bowl_controller::constants::PROPERTY_COUNT_MAX];
   modular_server::Parameter parameters_[fly_bowl_controller::constants::PARAMETER_COUNT_MAX];
   modular_server::Function functions_[fly_bowl_controller::constants::FUNCTION_COUNT_MAX];
   modular_server::Callback callbacks_[fly_bowl_controller::constants::CALLBACK_COUNT_MAX];
 
+  size_t getFlyBowlCount();
+
+  void setFanOn(size_t fly_bowl);
+  void setFanOff(size_t fly_bowl);
+
+  void setIndicatorOn(size_t fly_bowl);
+  void setIndicatorOff(size_t fly_bowl);
+
   // Handlers
+  void setFlyBowlEnabledHandler(size_t fly_bowl);
+  void setIrBacklightsOnAtPowerHandler();
+  void setIrBacklightsOnHandler(modular_server::Pin * pin_ptr);
+  void setIrBacklightsOffHandler(modular_server::Pin * pin_ptr);
+  void setVisibleBacklightsOnAtPowerHandler();
+  void setVisibleBacklightsOnHandler(modular_server::Pin * pin_ptr);
+  void setVisibleBacklightsOffHandler(modular_server::Pin * pin_ptr);
 
 };
 

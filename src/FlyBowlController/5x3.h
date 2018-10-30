@@ -16,12 +16,23 @@ namespace fly_bowl_controller
 {
 namespace constants
 {
+enum {FLY_BOWL_COUNT=4};
+
+extern const size_t fly_bowl_ir_backlights[FLY_BOWL_COUNT];
+
+extern const size_t fly_bowl_visible_backlights[FLY_BOWL_COUNT];
+
+extern const size_t fan_high_voltages[FLY_BOWL_COUNT];
+
+extern const size_t indicator_low_voltages[FLY_BOWL_COUNT];
+
 // Pins
 
 // Units
 
 // Properties
 // Property values must be long, double, bool, long[], double[], bool[], char[], ConstantString *, (ConstantString *)[]
+extern const bool fly_bowls_enabled_default[FLY_BOWL_COUNT];
 
 // Parameters
 
