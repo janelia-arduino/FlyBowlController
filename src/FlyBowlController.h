@@ -56,6 +56,8 @@ private:
   modular_server::Function functions_[fly_bowl_controller::constants::FUNCTION_COUNT_MAX];
   modular_server::Callback callbacks_[fly_bowl_controller::constants::CALLBACK_COUNT_MAX];
 
+  fly_bowl_controller::constants::PwmInfo pwm_info_[digital_controller::constants::INDEXED_PWM_COUNT_MAX];
+
   size_t getFlyBowlCount();
 
   void setFanOn(size_t fly_bowl);
@@ -74,10 +76,10 @@ private:
   void setVisibleBacklightsOffHandler(modular_server::Pin * pin_ptr);
   void addVisibleBacklightsPwmHandler();
 
-  void startVisibleBacklightsPwmHandler(int pwm_index);
-  void stopVisibleBacklightsPwmHandler(int pwm_index);
-  void setVisibleBacklightsOnAtPowerHandler(int pwm_index);
-  void setVisibleBacklightsOffHandler(int pwm_index);
+  void visibleBacklightStartPulseHandler(int pwm_index);
+  void visibleBacklightStopPulseHandler(int pwm_index);
+  void visibleBacklightStartPwmHandler(int pwm_index);
+  void visibleBacklightStopPwmHandler(int pwm_index);
 
 };
 

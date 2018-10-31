@@ -238,22 +238,38 @@ int FlyBowlController::addVisibleBacklightsPwm(long power,
     long on_duration,
     long count)
 {
-  uint32_t channels = 0;
-  uint32_t bit = 1;
+  uint32_t visible_backlight_channels = 0;
+  uint32_t indicator_channels = 0;
+  const uint32_t bit = 1;
   size_t channel;
   size_t fly_bowl_visible_backlight;
+  size_t indicator_low_voltage;
   for (size_t fly_bowl=0; fly_bowl<getFlyBowlCount(); ++fly_bowl)
   {
     fly_bowl_visible_backlight = constants::fly_bowl_visible_backlights[fly_bowl];
     channel = visibleBacklightToDigitalChannel(fly_bowl_visible_backlight);
-    channels |= (bit << channel);
+    visible_backlight_channels |= (bit << channel);
+
+    indicator_low_voltage = constants::indicator_low_voltages[fly_bowl];
+    channel = lowVoltageToDigitalChannel(indicator_low_voltage);
+    indicator_channels |= (bit << channel);
   }
-  int pwm_index = addPwm(channels,
+  int pwm_index = addPwm(visible_backlight_channels,
     power,
     delay,
     period,
     on_duration,
-    count);
+    count,
+    makeFunctor((Functor1<int> *)0,*this,&FlyBowlController::visibleBacklightStartPulseHandler),
+    makeFunctor((Functor1<int> *)0,*this,&FlyBowlController::visibleBacklightStopPulseHandler),
+    makeFunctor((Functor1<int> *)0,*this,&FlyBowlController::visibleBacklightStartPwmHandler),
+    makeFunctor((Functor1<int> *)0,*this,&FlyBowlController::visibleBacklightStopPwmHandler));
+  if (pwm_index >= 0)
+  {
+    pwm_info_[pwm_index].visible_backlight_channels = visible_backlight_channels;
+    pwm_info_[pwm_index].power = power;
+    pwm_info_[pwm_index].indicator_channels = indicator_channels;
+  }
   return pwm_index;
 }
 
@@ -361,4 +377,34 @@ void FlyBowlController::addVisibleBacklightsPwmHandler()
   modular_server_.parameter(digital_controller::constants::on_duration_parameter_name).getValue(on_duration);
   long count;
   modular_server_.parameter(digital_controller::constants::count_parameter_name).getValue(count);
+
+  addVisibleBacklightsPwm(power,delay,period,on_duration,count);
+}
+
+void FlyBowlController::visibleBacklightStartPulseHandler(int pwm_index)
+{
+  uint32_t & visible_backlight_channels = pwm_info_[pwm_index].visible_backlight_channels;
+  long power = pwm_info_[pwm_index].power;
+  setChannelsOnAtPower(visible_backlight_channels,power);
+}
+
+void FlyBowlController::visibleBacklightStopPulseHandler(int pwm_index)
+{
+  uint32_t & visible_backlight_channels = pwm_info_[pwm_index].visible_backlight_channels;
+  setChannelsOff(visible_backlight_channels);
+}
+
+void FlyBowlController::visibleBacklightStartPwmHandler(int pwm_index)
+{
+  uint32_t & indicator_channels = pwm_info_[pwm_index].indicator_channels;
+  setChannelsOn(indicator_channels);
+}
+
+void FlyBowlController::visibleBacklightStopPwmHandler(int pwm_index)
+{
+  uint32_t & visible_backlight_channels = pwm_info_[pwm_index].visible_backlight_channels;
+  setChannelsOff(visible_backlight_channels);
+
+  uint32_t & indicator_channels = pwm_info_[pwm_index].indicator_channels;
+  setChannelsOff(indicator_channels);
 }

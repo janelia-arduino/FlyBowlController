@@ -29,6 +29,13 @@ extern const modular_server::FirmwareInfo firmware_info;
 extern const long fan_power_min;
 extern const long fan_power_max;
 
+struct PwmInfo
+{
+  uint32_t visible_backlight_channels;
+  long power;
+  uint32_t indicator_channels;
+};
+
 // Pins
 
 // Units
