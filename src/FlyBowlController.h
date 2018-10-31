@@ -58,6 +58,13 @@ private:
 
   fly_bowl_controller::constants::PwmInfo pwm_info_[digital_controller::constants::INDEXED_PWM_COUNT_MAX];
 
+  uint32_t ir_backlights_enabled_mask_;
+  uint32_t visible_backlights_enabled_mask_;
+  uint32_t high_voltages_enabled_mask_;
+  uint32_t low_voltages_enabled_mask_;
+
+  void initializeEnabledMasks();
+
   size_t getFlyBowlCount();
 
   void setFanOn(size_t fly_bowl);
