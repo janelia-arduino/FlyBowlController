@@ -45,6 +45,12 @@ public:
   void setVisibleBacklightsOff();
 
   int addVisibleBacklightsPwm(long power,
+    long pulse_delay,
+    long pulse_period,
+    long pulse_on_duration,
+    long pulse_count);
+
+  int addExperimentStep(long power,
     long delay,
     long period,
     long on_duration,
@@ -72,6 +78,11 @@ private:
 
   void setIndicatorOn(size_t fly_bowl);
   void setIndicatorOff(size_t fly_bowl);
+
+  int addExperimentStepPwm(long power,
+    long pulse_period,
+    long pulse_on_duration,
+    long pulse_count);
 
   // Handlers
   void setFlyBowlEnabledHandler(size_t fly_bowl);

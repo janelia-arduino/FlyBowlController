@@ -36,6 +36,21 @@ CONSTANT_STRING(fly_bowls_enabled_property_name,"flyBowlsEnabled");
 const bool fly_bowls_enabled_element_default = true;
 
 // Parameters
+CONSTANT_STRING(pulse_delay_parameter_name,"pulse_delay");
+const long pulse_delay_min = 0;
+const long pulse_delay_max = 2000000000;
+
+CONSTANT_STRING(pulse_period_parameter_name,"pulse_period");
+const long pulse_period_min = 2;
+const long pulse_period_max = 2000000000;
+
+CONSTANT_STRING(pulse_on_duration_parameter_name,"pulse_on_duration");
+const long pulse_on_duration_min = 1;
+const long pulse_on_duration_max = 2000000000;
+
+CONSTANT_STRING(pulse_count_parameter_name,"pulse_count");
+const long pulse_count_min = 1;
+const long pulse_count_max = 2000000000;
 
 // Function
 CONSTANT_STRING(set_ir_backlights_on_at_power_function_name,"setIrBacklightsOnAtPower");

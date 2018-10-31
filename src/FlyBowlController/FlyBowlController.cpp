@@ -50,13 +50,21 @@ void FlyBowlController::setup()
   // Parameters
   modular_server::Parameter & power_parameter = modular_server_.parameter(digital_controller::constants::power_parameter_name);
 
-  modular_server::Parameter & delay_parameter = modular_server_.parameter(digital_controller::constants::delay_parameter_name);
+  modular_server::Parameter & pulse_delay_parameter = modular_server_.createParameter(constants::pulse_delay_parameter_name);
+  pulse_delay_parameter.setRange(constants::pulse_delay_min,constants::pulse_delay_max);
+  pulse_delay_parameter.setUnits(digital_controller::constants::ms_units);
 
-  modular_server::Parameter & period_parameter = modular_server_.parameter(digital_controller::constants::period_parameter_name);
+  modular_server::Parameter & pulse_period_parameter = modular_server_.createParameter(constants::pulse_period_parameter_name);
+  pulse_period_parameter.setRange(constants::pulse_period_min,constants::pulse_period_max);
+  pulse_period_parameter.setUnits(digital_controller::constants::ms_units);
 
-  modular_server::Parameter & on_duration_parameter = modular_server_.parameter(digital_controller::constants::on_duration_parameter_name);
+  modular_server::Parameter & pulse_on_duration_parameter = modular_server_.createParameter(constants::pulse_on_duration_parameter_name);
+  pulse_on_duration_parameter.setRange(constants::pulse_on_duration_min,constants::pulse_on_duration_max);
+  pulse_on_duration_parameter.setUnits(digital_controller::constants::ms_units);
 
-  modular_server::Parameter & count_parameter = modular_server_.parameter(digital_controller::constants::count_parameter_name);
+  modular_server::Parameter & pulse_count_parameter = modular_server_.createParameter(constants::pulse_count_parameter_name);
+  pulse_count_parameter.setRange(constants::pulse_count_min,constants::pulse_count_max);
+  pulse_count_parameter.setUnits(digital_controller::constants::ms_units);
 
   // Functions
   modular_server::Function & set_ir_backlights_on_at_power_function = modular_server_.createFunction(fly_bowl_controller::constants::set_ir_backlights_on_at_power_function_name);
@@ -70,10 +78,10 @@ void FlyBowlController::setup()
   modular_server::Function & add_visible_backlights_pwm_function = modular_server_.createFunction(fly_bowl_controller::constants::add_visible_backlights_pwm_function_name);
   add_visible_backlights_pwm_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&FlyBowlController::addVisibleBacklightsPwmHandler));
   add_visible_backlights_pwm_function.addParameter(power_parameter);
-  add_visible_backlights_pwm_function.addParameter(delay_parameter);
-  add_visible_backlights_pwm_function.addParameter(period_parameter);
-  add_visible_backlights_pwm_function.addParameter(on_duration_parameter);
-  add_visible_backlights_pwm_function.addParameter(count_parameter);
+  add_visible_backlights_pwm_function.addParameter(pulse_delay_parameter);
+  add_visible_backlights_pwm_function.addParameter(pulse_period_parameter);
+  add_visible_backlights_pwm_function.addParameter(pulse_on_duration_parameter);
+  add_visible_backlights_pwm_function.addParameter(pulse_count_parameter);
   add_visible_backlights_pwm_function.setResultTypeLong();
 
   // Callbacks
@@ -236,10 +244,10 @@ void FlyBowlController::setVisibleBacklightsOff()
 }
 
 int FlyBowlController::addVisibleBacklightsPwm(long power,
-  long delay,
-  long period,
-  long on_duration,
-  long count)
+  long pulse_delay,
+  long pulse_period,
+  long pulse_on_duration,
+  long pulse_count)
 {
   uint32_t visible_backlight_channels = 0;
   uint32_t indicator_channels = 0;
@@ -259,10 +267,10 @@ int FlyBowlController::addVisibleBacklightsPwm(long power,
   }
   int pwm_index = addPwm(visible_backlight_channels,
     power,
-    delay,
-    period,
-    on_duration,
-    count,
+    pulse_delay,
+    pulse_period,
+    pulse_on_duration,
+    pulse_count,
     makeFunctor((Functor1<int> *)0,*this,&FlyBowlController::visibleBacklightStartPulseHandler),
     makeFunctor((Functor1<int> *)0,*this,&FlyBowlController::visibleBacklightStopPulseHandler),
     makeFunctor((Functor1<int> *)0,*this,&FlyBowlController::visibleBacklightStartPwmHandler),
@@ -458,16 +466,16 @@ void FlyBowlController::addVisibleBacklightsPwmHandler()
 {
   long power;
   modular_server_.parameter(digital_controller::constants::power_parameter_name).getValue(power);
-  long delay;
-  modular_server_.parameter(digital_controller::constants::delay_parameter_name).getValue(delay);
-  long period;
-  modular_server_.parameter(digital_controller::constants::period_parameter_name).getValue(period);
-  long on_duration;
-  modular_server_.parameter(digital_controller::constants::on_duration_parameter_name).getValue(on_duration);
-  long count;
-  modular_server_.parameter(digital_controller::constants::count_parameter_name).getValue(count);
+  long pulse_delay;
+  modular_server_.parameter(constants::pulse_delay_parameter_name).getValue(pulse_delay);
+  long pulse_period;
+  modular_server_.parameter(constants::pulse_period_parameter_name).getValue(pulse_period);
+  long pulse_on_duration;
+  modular_server_.parameter(constants::pulse_on_duration_parameter_name).getValue(pulse_on_duration);
+  long pulse_count;
+  modular_server_.parameter(constants::pulse_count_parameter_name).getValue(pulse_count);
 
-  int pwm_index = addVisibleBacklightsPwm(power,delay,period,on_duration,count);
+  int pwm_index = addVisibleBacklightsPwm(power,pulse_delay,pulse_period,pulse_on_duration,pulse_count);
   returnPwmIndexResponse(pwm_index);
 }
 

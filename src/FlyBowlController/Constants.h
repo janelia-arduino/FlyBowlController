@@ -17,7 +17,7 @@ namespace constants
 {
 //MAX values must be >= 1, >= created/copied count, < RAM limit
 enum{PROPERTY_COUNT_MAX=1};
-enum{PARAMETER_COUNT_MAX=1};
+enum{PARAMETER_COUNT_MAX=4};
 enum{FUNCTION_COUNT_MAX=3};
 enum{CALLBACK_COUNT_MAX=4};
 
@@ -46,6 +46,21 @@ extern ConstantString fly_bowls_enabled_property_name;
 extern const bool fly_bowls_enabled_element_default;
 
 // Parameters
+extern ConstantString pulse_delay_parameter_name;
+extern const long pulse_delay_min;
+extern const long pulse_delay_max;
+
+extern ConstantString pulse_period_parameter_name;
+extern const long pulse_period_min;
+extern const long pulse_period_max;
+
+extern ConstantString pulse_on_duration_parameter_name;
+extern const long pulse_on_duration_min;
+extern const long pulse_on_duration_max;
+
+extern ConstantString pulse_count_parameter_name;
+extern const long pulse_count_min;
+extern const long pulse_count_max;
 
 // Function
 extern ConstantString set_ir_backlights_on_at_power_function_name;
