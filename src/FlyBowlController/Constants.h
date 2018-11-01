@@ -54,7 +54,27 @@ enum
   NO_EXPERIMENT_STEP_SPACE_LEFT_INDEX=-1,
 };
 
+struct ExperimentStatus
+{
+  const ConstantString * state_ptr;
+  size_t experiment_step_index;
+  long sequence_index;
+  long sequence_count;
+  EventId start_sequence_event_id;
+  digital_controller::constants::PwmId pwm_id;
+};
+
 extern const long ms_per_second;
+
+extern ConstantString state_string;
+extern ConstantString state_experiment_not_running_string;
+extern ConstantString state_delaying_before_starting_experiment_string;
+extern ConstantString state_experiment_running_string;
+
+extern ConstantString experiment_step_index_string;
+extern ConstantString experiment_step_count_string;
+extern ConstantString sequence_index_string;
+extern ConstantString sequence_count_string;
 
 // Pins
 
@@ -106,7 +126,7 @@ extern ConstantString set_visible_backlights_on_at_power_function_name;
 extern ConstantString add_visible_backlights_pwm_function_name;
 extern ConstantString add_experiment_step_function_name;
 extern ConstantString get_experiment_steps_function_name;
-extern ConstantString get_experiment_info_function_name;
+extern ConstantString get_experiment_status_function_name;
 
 // Callbacks
 extern ConstantString set_ir_backlights_on_callback_name;

@@ -29,6 +29,16 @@ const long fan_power_max = 100;
 
 const long ms_per_second = 1000;
 
+CONSTANT_STRING(state_string,"state");
+CONSTANT_STRING(state_experiment_not_running_string,"EXPERIMENT_NOT_RUNNING");
+CONSTANT_STRING(state_delaying_before_starting_experiment_string,"DELAYING_BEFORE_STARTING_EXPERIMENT");
+CONSTANT_STRING(state_experiment_running_string,"EXPERIMENT_RUNNING");
+
+CONSTANT_STRING(experiment_step_index_string,"experiment_step_index");
+CONSTANT_STRING(experiment_step_count_string,"experiment_step_count");
+CONSTANT_STRING(sequence_index_string,"sequence_index");
+CONSTANT_STRING(sequence_count_string,"sequence_count");
+
 // Pins
 
 // Units
@@ -78,7 +88,7 @@ CONSTANT_STRING(set_visible_backlights_on_at_power_function_name,"setVisibleBack
 CONSTANT_STRING(add_visible_backlights_pwm_function_name,"addVisibleBacklightsPwm");
 CONSTANT_STRING(add_experiment_step_function_name,"addExperimentStep");
 CONSTANT_STRING(get_experiment_steps_function_name,"getExperimentSteps");
-CONSTANT_STRING(get_experiment_info_function_name,"getExperimentInfo");
+CONSTANT_STRING(get_experiment_status_function_name,"getExperimentStatus");
 
 // Callbacks
 CONSTANT_STRING(set_ir_backlights_on_callback_name,"setIrBacklightsOn");

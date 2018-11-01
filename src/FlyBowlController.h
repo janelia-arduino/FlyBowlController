@@ -44,7 +44,7 @@ public:
   void setVisibleBacklightsOn();
   void setVisibleBacklightsOff();
 
-  int addVisibleBacklightsPwm(long power,
+  digital_controller::constants::PwmId addVisibleBacklightsPwm(long power,
     long pulse_delay,
     long pulse_period,
     long pulse_on_duration,
@@ -61,6 +61,7 @@ public:
   void removeAllExperimentSteps();
   void runExperiment();
   void stopExperiment();
+  fly_bowl_controller::constants::ExperimentStatus getExperimentStatus();
 
 private:
   modular_server::Property properties_[fly_bowl_controller::constants::PROPERTY_COUNT_MAX];
@@ -78,7 +79,7 @@ private:
   uint32_t high_voltages_enabled_mask_;
   uint32_t low_voltages_enabled_mask_;
 
-  bool experiment_running_;
+  fly_bowl_controller::constants::ExperimentStatus experiment_status_;
 
   void initializeEnabledMasks();
 
@@ -90,10 +91,12 @@ private:
   void setIndicatorOn(size_t fly_bowl);
   void setIndicatorOff(size_t fly_bowl);
 
-  int addExperimentStepPwm(long power,
-    long pulse_period,
-    long pulse_on_duration,
-    long pulse_count);
+  void resetExperimentStatus();
+
+  void startExperiment();
+  void startExperimentStep();
+  void startSequence();
+  void stopExperimentStep();
 
   // Handlers
   void setFlyBowlEnabledHandler(size_t fly_bowl);
@@ -106,7 +109,7 @@ private:
   void addVisibleBacklightsPwmHandler();
   void addExperimentStepHandler();
   void getExperimentStepsHandler();
-  void getExperimentInfoHandler();
+  void getExperimentStatusHandler();
   void removeAllExperimentStepsHandler(modular_server::Pin * pin_ptr);
   void runExperimentHandler(modular_server::Pin * pin_ptr);
   void stopExperimentHandler(modular_server::Pin * pin_ptr);
@@ -116,6 +119,9 @@ private:
   void visibleBacklightStartPwmHandler(int pwm_index);
   void visibleBacklightStopPwmHandler(int pwm_index);
 
+  void startExperimentHandler(int arg);
+  void startSequenceHandler(int arg);
+  void stopExperimentStepHandler(int arg);
 };
 
 #endif

@@ -23,7 +23,9 @@ void FlyBowlController::setup()
   resetWatchdog();
 
   // Variable Setup
-  experiment_running_ = false;
+
+  // Experiment Status Setup
+  resetExperimentStatus();
 
   // Set Device ID
   modular_server_.setDeviceName(constants::device_name);
@@ -83,15 +85,15 @@ void FlyBowlController::setup()
   step_duration_parameter.setUnits(constants::seconds_units);
 
   // Functions
-  modular_server::Function & set_ir_backlights_on_at_power_function = modular_server_.createFunction(fly_bowl_controller::constants::set_ir_backlights_on_at_power_function_name);
+  modular_server::Function & set_ir_backlights_on_at_power_function = modular_server_.createFunction(constants::set_ir_backlights_on_at_power_function_name);
   set_ir_backlights_on_at_power_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&FlyBowlController::setIrBacklightsOnAtPowerHandler));
   set_ir_backlights_on_at_power_function.addParameter(power_parameter);
 
-  modular_server::Function & set_visible_backlights_on_at_power_function = modular_server_.createFunction(fly_bowl_controller::constants::set_visible_backlights_on_at_power_function_name);
+  modular_server::Function & set_visible_backlights_on_at_power_function = modular_server_.createFunction(constants::set_visible_backlights_on_at_power_function_name);
   set_visible_backlights_on_at_power_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&FlyBowlController::setVisibleBacklightsOnAtPowerHandler));
   set_visible_backlights_on_at_power_function.addParameter(power_parameter);
 
-  modular_server::Function & add_visible_backlights_pwm_function = modular_server_.createFunction(fly_bowl_controller::constants::add_visible_backlights_pwm_function_name);
+  modular_server::Function & add_visible_backlights_pwm_function = modular_server_.createFunction(constants::add_visible_backlights_pwm_function_name);
   add_visible_backlights_pwm_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&FlyBowlController::addVisibleBacklightsPwmHandler));
   add_visible_backlights_pwm_function.addParameter(power_parameter);
   add_visible_backlights_pwm_function.addParameter(pulse_delay_parameter);
@@ -100,7 +102,7 @@ void FlyBowlController::setup()
   add_visible_backlights_pwm_function.addParameter(pulse_count_parameter);
   add_visible_backlights_pwm_function.setResultTypeLong();
 
-  modular_server::Function & add_experiment_step_function = modular_server_.createFunction(fly_bowl_controller::constants::add_experiment_step_function_name);
+  modular_server::Function & add_experiment_step_function = modular_server_.createFunction(constants::add_experiment_step_function_name);
   add_experiment_step_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&FlyBowlController::addExperimentStepHandler));
   add_experiment_step_function.addParameter(power_parameter);
   add_experiment_step_function.addParameter(pulse_period_parameter);
@@ -116,21 +118,21 @@ void FlyBowlController::setup()
   get_experiment_steps_function.setResultTypeArray();
   get_experiment_steps_function.setResultTypeObject();
 
-  modular_server::Function & get_experiment_info_function = modular_server_.createFunction(constants::get_experiment_info_function_name);
-  get_experiment_info_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&FlyBowlController::getExperimentInfoHandler));
-  get_experiment_info_function.setResultTypeObject();
+  modular_server::Function & get_experiment_status_function = modular_server_.createFunction(constants::get_experiment_status_function_name);
+  get_experiment_status_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&FlyBowlController::getExperimentStatusHandler));
+  get_experiment_status_function.setResultTypeObject();
 
   // Callbacks
-  modular_server::Callback & set_ir_backlights_on_callback = modular_server_.createCallback(fly_bowl_controller::constants::set_ir_backlights_on_callback_name);
+  modular_server::Callback & set_ir_backlights_on_callback = modular_server_.createCallback(constants::set_ir_backlights_on_callback_name);
   set_ir_backlights_on_callback.attachFunctor(makeFunctor((Functor1<modular_server::Pin *> *)0,*this,&FlyBowlController::setIrBacklightsOnHandler));
 
-  modular_server::Callback & set_ir_backlights_off_callback = modular_server_.createCallback(fly_bowl_controller::constants::set_ir_backlights_off_callback_name);
+  modular_server::Callback & set_ir_backlights_off_callback = modular_server_.createCallback(constants::set_ir_backlights_off_callback_name);
   set_ir_backlights_off_callback.attachFunctor(makeFunctor((Functor1<modular_server::Pin *> *)0,*this,&FlyBowlController::setIrBacklightsOffHandler));
 
-  modular_server::Callback & set_visible_backlights_on_callback = modular_server_.createCallback(fly_bowl_controller::constants::set_visible_backlights_on_callback_name);
+  modular_server::Callback & set_visible_backlights_on_callback = modular_server_.createCallback(constants::set_visible_backlights_on_callback_name);
   set_visible_backlights_on_callback.attachFunctor(makeFunctor((Functor1<modular_server::Pin *> *)0,*this,&FlyBowlController::setVisibleBacklightsOnHandler));
 
-  modular_server::Callback & set_visible_backlights_off_callback = modular_server_.createCallback(fly_bowl_controller::constants::set_visible_backlights_off_callback_name);
+  modular_server::Callback & set_visible_backlights_off_callback = modular_server_.createCallback(constants::set_visible_backlights_off_callback_name);
   set_visible_backlights_off_callback.attachFunctor(makeFunctor((Functor1<modular_server::Pin *> *)0,*this,&FlyBowlController::setVisibleBacklightsOffHandler));
 
   modular_server::Callback & remove_all_experiment_steps_callback = modular_server_.createCallback(constants::remove_all_experiment_steps_callback_name);
@@ -288,7 +290,7 @@ void FlyBowlController::setVisibleBacklightsOff()
   }
 }
 
-int FlyBowlController::addVisibleBacklightsPwm(long power,
+digital_controller::constants::PwmId FlyBowlController::addVisibleBacklightsPwm(long power,
   long pulse_delay,
   long pulse_period,
   long pulse_on_duration,
@@ -310,7 +312,7 @@ int FlyBowlController::addVisibleBacklightsPwm(long power,
     channel = lowVoltageToDigitalChannel(indicator_low_voltage);
     indicator_channels |= (bit << channel);
   }
-  int pwm_index = addPwm(visible_backlight_channels,
+  digital_controller::constants::PwmId pwm_id = addPwm(visible_backlight_channels,
     power,
     pulse_delay,
     pulse_period,
@@ -320,13 +322,13 @@ int FlyBowlController::addVisibleBacklightsPwm(long power,
     makeFunctor((Functor1<int> *)0,*this,&FlyBowlController::visibleBacklightStopPulseHandler),
     makeFunctor((Functor1<int> *)0,*this,&FlyBowlController::visibleBacklightStartPwmHandler),
     makeFunctor((Functor1<int> *)0,*this,&FlyBowlController::visibleBacklightStopPwmHandler));
-  if (pwm_index >= 0)
+  if (pwm_id.index >= 0)
   {
-    pwm_infos_[pwm_index].visible_backlight_channels = visible_backlight_channels;
-    pwm_infos_[pwm_index].power = power;
-    pwm_infos_[pwm_index].indicator_channels = indicator_channels;
+    pwm_infos_[pwm_id.index].visible_backlight_channels = visible_backlight_channels;
+    pwm_infos_[pwm_id.index].power = power;
+    pwm_infos_[pwm_id.index].indicator_channels = indicator_channels;
   }
-  return pwm_index;
+  return pwm_id;
 }
 
 int FlyBowlController::addExperimentStep(long power,
@@ -363,12 +365,35 @@ void FlyBowlController::removeAllExperimentSteps()
 
 void FlyBowlController::runExperiment()
 {
-  experiment_running_ = true;
+  if ((experiment_steps_.size() == 0) || (event_controller_.eventsAvailable() == 0))
+  {
+    return;
+  }
+
+  experiment_status_.state_ptr = &constants::state_delaying_before_starting_experiment_string;
+
+  double experiment_delay;
+  modular_server::Property & experiment_delay_property = modular_server_.property(constants::experiment_delay_property_name);
+  experiment_delay_property.getValue(experiment_delay);
+
+  long experiment_delay_ms = experiment_delay * constants::ms_per_second;
+
+  EventId start_experiment_event_id = event_controller_.addEventUsingDelay(
+    makeFunctor((Functor1<int> *)0,*this,&FlyBowlController::startExperimentHandler),
+    experiment_delay_ms);
+  event_controller_.enable(start_experiment_event_id);
 }
 
 void FlyBowlController::stopExperiment()
 {
-  experiment_running_ = false;
+  stopAllPwm();
+  event_controller_.clearAllEvents();
+  resetExperimentStatus();
+}
+
+constants::ExperimentStatus FlyBowlController::getExperimentStatus()
+{
+  return experiment_status_;
 }
 
 void FlyBowlController::initializeEnabledMasks()
@@ -435,6 +460,93 @@ void FlyBowlController::setIndicatorOn(size_t fly_bowl)
 void FlyBowlController::setIndicatorOff(size_t fly_bowl)
 {
   setLowVoltageOff(constants::indicator_low_voltages[fly_bowl]);
+}
+
+void FlyBowlController::resetExperimentStatus()
+{
+  experiment_status_.state_ptr = &constants::state_experiment_not_running_string;
+  experiment_status_.experiment_step_index = 0;
+  experiment_status_.sequence_index = 0;
+  experiment_status_.sequence_count = 0;
+}
+
+void FlyBowlController::startExperiment()
+{
+  experiment_status_.state_ptr = &constants::state_experiment_running_string;
+
+  startExperimentStep();
+}
+
+void FlyBowlController::startExperimentStep()
+{
+  if (event_controller_.eventsAvailable() == 0)
+  {
+    stopExperiment();
+    return;
+  }
+
+  const size_t experiment_step_index = experiment_status_.experiment_step_index;
+  const constants::ExperimentStep experiment_step = experiment_steps_[experiment_step_index];
+
+  experiment_status_.sequence_index = 0;
+  experiment_status_.sequence_count = experiment_step.sequence_count;
+
+  long sequence_delay = 0;
+
+  long sequence_period = experiment_step.pulse_period * experiment_step.pulse_count;
+  sequence_period += experiment_step.sequence_off_duration;
+
+  experiment_status_.start_sequence_event_id = event_controller_.addRecurringEventUsingDelay(
+    makeFunctor((Functor1<int> *)0,*this,&FlyBowlController::startSequenceHandler),
+    sequence_delay,
+    sequence_period,
+    experiment_step.sequence_count);
+  event_controller_.enable(experiment_status_.start_sequence_event_id);
+
+  long step_duration_ms = experiment_step.step_duration * constants::ms_per_second;
+
+  EventId stop_experiment_step_event_id = event_controller_.addEventUsingDelay(
+    makeFunctor((Functor1<int> *)0,*this,&FlyBowlController::stopExperimentStepHandler),
+    step_duration_ms);
+  event_controller_.enable(stop_experiment_step_event_id);
+}
+
+void FlyBowlController::startSequence()
+{
+  if (event_controller_.eventsAvailable() == 0)
+  {
+    stopExperiment();
+    return;
+  }
+
+  const size_t experiment_step_index = experiment_status_.experiment_step_index;
+  const constants::ExperimentStep experiment_step = experiment_steps_[experiment_step_index];
+
+  long pulse_delay = 0;
+
+  experiment_status_.pwm_id = addVisibleBacklightsPwm(experiment_step.power,
+    pulse_delay,
+    experiment_step.pulse_period,
+    experiment_step.pulse_on_duration,
+    experiment_step.pulse_count);
+}
+
+void FlyBowlController::stopExperimentStep()
+{
+  event_controller_.clear(experiment_status_.start_sequence_event_id);
+  stopPwm(experiment_status_.pwm_id);
+
+  setVisibleBacklightsOff();
+
+  experiment_status_.experiment_step_index++;
+  const size_t experiment_step_index = experiment_status_.experiment_step_index;
+
+  if (experiment_step_index == experiment_steps_.size())
+  {
+    stopExperiment();
+    return;
+  }
+  startExperimentStep();
 }
 
 // Handlers must be non-blocking (avoid 'delay')
@@ -562,8 +674,12 @@ void FlyBowlController::addVisibleBacklightsPwmHandler()
   long pulse_count;
   modular_server_.parameter(constants::pulse_count_parameter_name).getValue(pulse_count);
 
-  int pwm_index = addVisibleBacklightsPwm(power,pulse_delay,pulse_period,pulse_on_duration,pulse_count);
-  returnPwmIndexResponse(pwm_index);
+  digital_controller::constants::PwmId pwm_id = addVisibleBacklightsPwm(power,
+    pulse_delay,
+    pulse_period,
+    pulse_on_duration,
+    pulse_count);
+  returnPwmIndexResponse(pwm_id.index);
 }
 
 void FlyBowlController::addExperimentStepHandler()
@@ -633,14 +749,24 @@ void FlyBowlController::getExperimentStepsHandler()
 
 }
 
-void FlyBowlController::getExperimentInfoHandler()
+void FlyBowlController::getExperimentStatusHandler()
 {
+  constants::ExperimentStatus experiment_status = experiment_status_;
+
   modular_server_.response().writeResultKey();
 
   modular_server_.response().beginObject();
 
-  modular_server_.response().write(digital_controller::constants::running_string,
-    experiment_running_);
+  modular_server_.response().write(constants::state_string,
+    experiment_status.state_ptr);
+  modular_server_.response().write(constants::experiment_step_index_string,
+    experiment_status.experiment_step_index);
+  modular_server_.response().write(constants::experiment_step_count_string,
+    experiment_steps_.size());
+  modular_server_.response().write(constants::sequence_index_string,
+    experiment_status.sequence_index);
+  modular_server_.response().write(constants::sequence_count_string,
+    experiment_status.sequence_count);
 
   modular_server_.response().endObject();
 }
@@ -692,4 +818,24 @@ void FlyBowlController::visibleBacklightStopPwmHandler(int pwm_index)
   uint32_t indicator_channels = pwm_infos_[pwm_index].indicator_channels;
   indicator_channels &= low_voltages_enabled_mask_;
   setChannelsOff(indicator_channels);
+
+  if (experiment_status_.state_ptr == &constants::state_experiment_running_string)
+  {
+    experiment_status_.sequence_index++;
+  }
+}
+
+void FlyBowlController::startExperimentHandler(int arg)
+{
+  startExperiment();
+}
+
+void FlyBowlController::startSequenceHandler(int arg)
+{
+  startSequence();
+}
+
+void FlyBowlController::stopExperimentStepHandler(int arg)
+{
+  stopExperimentStep();
 }
