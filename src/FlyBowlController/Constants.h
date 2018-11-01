@@ -16,10 +16,12 @@ namespace fly_bowl_controller
 namespace constants
 {
 //MAX values must be >= 1, >= created/copied count, < RAM limit
-enum{PROPERTY_COUNT_MAX=1};
-enum{PARAMETER_COUNT_MAX=4};
-enum{FUNCTION_COUNT_MAX=3};
-enum{CALLBACK_COUNT_MAX=4};
+enum{PROPERTY_COUNT_MAX=2};
+enum{PARAMETER_COUNT_MAX=7};
+enum{FUNCTION_COUNT_MAX=6};
+enum{CALLBACK_COUNT_MAX=7};
+
+enum{EXPERIMENT_STEP_COUNT_MAX=32};
 
 extern ConstantString device_name;
 
@@ -36,14 +38,38 @@ struct PwmInfo
   uint32_t indicator_channels;
 };
 
+struct ExperimentStep
+{
+  long power;
+  long pulse_period;
+  long pulse_on_duration;
+  long pulse_count;
+  long sequence_off_duration;
+  long sequence_count;
+  double step_duration;
+};
+
+enum
+{
+  NO_EXPERIMENT_STEP_SPACE_LEFT_INDEX=-1,
+};
+
+extern const long ms_per_second;
+
 // Pins
 
 // Units
+extern ConstantString seconds_units;
 
 // Properties
 // Property values must be long, double, bool, long[], double[], bool[], char[], ConstantString *, (ConstantString *)[]
 extern ConstantString fly_bowls_enabled_property_name;
 extern const bool fly_bowls_enabled_element_default;
+
+extern ConstantString experiment_delay_property_name;
+extern const double experiment_delay_min;
+extern const double experiment_delay_max;
+extern const double experiment_delay_default;
 
 // Parameters
 extern ConstantString pulse_delay_parameter_name;
@@ -62,18 +88,37 @@ extern ConstantString pulse_count_parameter_name;
 extern const long pulse_count_min;
 extern const long pulse_count_max;
 
+extern ConstantString sequence_off_duration_parameter_name;
+extern const long sequence_off_duration_min;
+extern const long sequence_off_duration_max;
+
+extern ConstantString sequence_count_parameter_name;
+extern const long sequence_count_min;
+extern const long sequence_count_max;
+
+extern ConstantString step_duration_parameter_name;
+extern const double step_duration_min;
+extern const double step_duration_max;
+
 // Function
 extern ConstantString set_ir_backlights_on_at_power_function_name;
 extern ConstantString set_visible_backlights_on_at_power_function_name;
 extern ConstantString add_visible_backlights_pwm_function_name;
+extern ConstantString add_experiment_step_function_name;
+extern ConstantString get_experiment_steps_function_name;
+extern ConstantString get_experiment_info_function_name;
 
 // Callbacks
 extern ConstantString set_ir_backlights_on_callback_name;
 extern ConstantString set_ir_backlights_off_callback_name;
 extern ConstantString set_visible_backlights_on_callback_name;
 extern ConstantString set_visible_backlights_off_callback_name;
+extern ConstantString remove_all_experiment_steps_callback_name;
+extern ConstantString run_experiment_callback_name;
+extern ConstantString stop_experiment_callback_name;
 
 // Errors
+extern ConstantString no_experiment_step_space_left_error;
 }
 }
 #include "5x3.h"

@@ -51,10 +51,16 @@ public:
     long pulse_count);
 
   int addExperimentStep(long power,
-    long delay,
-    long period,
-    long on_duration,
-    long count);
+    long pulse_period,
+    long pulse_on_duration,
+    long pulse_count,
+    long sequence_off_duration,
+    long sequence_count,
+    double step_duration);
+
+  void removeAllExperimentSteps();
+  void runExperiment();
+  void stopExperiment();
 
 private:
   modular_server::Property properties_[fly_bowl_controller::constants::PROPERTY_COUNT_MAX];
@@ -62,12 +68,17 @@ private:
   modular_server::Function functions_[fly_bowl_controller::constants::FUNCTION_COUNT_MAX];
   modular_server::Callback callbacks_[fly_bowl_controller::constants::CALLBACK_COUNT_MAX];
 
-  fly_bowl_controller::constants::PwmInfo pwm_info_[digital_controller::constants::INDEXED_PWM_COUNT_MAX];
+  fly_bowl_controller::constants::PwmInfo pwm_infos_[digital_controller::constants::INDEXED_PWM_COUNT_MAX];
+
+  Array<fly_bowl_controller::constants::ExperimentStep,
+    fly_bowl_controller::constants::EXPERIMENT_STEP_COUNT_MAX> experiment_steps_;
 
   uint32_t ir_backlights_enabled_mask_;
   uint32_t visible_backlights_enabled_mask_;
   uint32_t high_voltages_enabled_mask_;
   uint32_t low_voltages_enabled_mask_;
+
+  bool experiment_running_;
 
   void initializeEnabledMasks();
 
@@ -93,6 +104,12 @@ private:
   void setVisibleBacklightsOnHandler(modular_server::Pin * pin_ptr);
   void setVisibleBacklightsOffHandler(modular_server::Pin * pin_ptr);
   void addVisibleBacklightsPwmHandler();
+  void addExperimentStepHandler();
+  void getExperimentStepsHandler();
+  void getExperimentInfoHandler();
+  void removeAllExperimentStepsHandler(modular_server::Pin * pin_ptr);
+  void runExperimentHandler(modular_server::Pin * pin_ptr);
+  void stopExperimentHandler(modular_server::Pin * pin_ptr);
 
   void visibleBacklightStartPulseHandler(int pwm_index);
   void visibleBacklightStopPulseHandler(int pwm_index);
