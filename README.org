@@ -17,6 +17,45 @@
 * API NAMES
 
   #+BEGIN_SRC js
+    {
+      "id": "getApi",
+      "result": {
+        "firmware": [
+          "FlyBowlController"
+        ],
+        "verbosity": "NAMES",
+        "functions": [
+          "setIrBacklightsOnAtPower",
+          "setVisibleBacklightsOnAtPower",
+          "addVisibleBacklightsPwm",
+          "addExperimentStep",
+          "getExperimentSteps",
+          "getExperimentStatus"
+        ],
+        "parameters": [
+          "pulse_delay",
+          "pulse_period",
+          "pulse_on_duration",
+          "pulse_count",
+          "sequence_off_duration",
+          "sequence_count",
+          "step_duration"
+        ],
+        "properties": [
+          "flyBowlsEnabled",
+          "experimentDelay"
+        ],
+        "callbacks": [
+          "setIrBacklightsOn",
+          "setIrBacklightsOff",
+          "setVisibleBacklightsOn",
+          "setVisibleBacklightsOff",
+          "removeAllExperimentSteps",
+          "runExperiment",
+          "stopExperiment"
+        ]
+      }
+    }
   #+END_SRC
 
 * API GENERAL
