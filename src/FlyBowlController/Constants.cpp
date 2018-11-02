@@ -31,7 +31,6 @@ const long ms_per_second = 1000;
 
 CONSTANT_STRING(state_string,"state");
 CONSTANT_STRING(state_experiment_not_running_string,"EXPERIMENT_NOT_RUNNING");
-CONSTANT_STRING(state_delaying_before_starting_experiment_string,"DELAYING_BEFORE_STARTING_EXPERIMENT");
 CONSTANT_STRING(state_experiment_running_string,"EXPERIMENT_RUNNING");
 
 CONSTANT_STRING(experiment_step_index_string,"experiment_step_index");
@@ -47,11 +46,6 @@ CONSTANT_STRING(seconds_units,"s");
 // Properties
 CONSTANT_STRING(fly_bowls_enabled_property_name,"flyBowlsEnabled");
 const bool fly_bowls_enabled_element_default = true;
-
-CONSTANT_STRING(experiment_delay_property_name,"experimentDelay");
-const double experiment_delay_min = 0.0;
-const double experiment_delay_max = 120.0;
-const double experiment_delay_default = 0.0;
 
 // Parameters
 CONSTANT_STRING(pulse_delay_parameter_name,"pulse_delay");
@@ -77,6 +71,10 @@ const long sequence_off_duration_max = 2000000000;
 CONSTANT_STRING(sequence_count_parameter_name,"sequence_count");
 const long sequence_count_min = 1;
 const long sequence_count_max = 2000000000;
+
+CONSTANT_STRING(step_delay_parameter_name,"step_delay");
+const double step_delay_min = 0.0;
+const double step_delay_max = 120.0;
 
 CONSTANT_STRING(step_duration_parameter_name,"step_duration");
 const double step_duration_min = 10.0;

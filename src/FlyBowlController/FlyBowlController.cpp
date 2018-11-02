@@ -48,9 +48,6 @@ void FlyBowlController::setup()
   modular_server::Property & fly_bowls_enabled_property = modular_server_.createProperty(constants::fly_bowls_enabled_property_name,constants::fly_bowls_enabled_default);
   fly_bowls_enabled_property.attachPostSetElementValueFunctor(makeFunctor((Functor1<size_t> *)0,*this,&FlyBowlController::setFlyBowlEnabledHandler));
 
-  modular_server::Property & experiment_delay_property = modular_server_.createProperty(constants::experiment_delay_property_name,constants::experiment_delay_default);
-  experiment_delay_property.setRange(constants::experiment_delay_min,constants::experiment_delay_max);
-
   initializeEnabledMasks();
 
   // Parameters
@@ -79,6 +76,10 @@ void FlyBowlController::setup()
   modular_server::Parameter & sequence_count_parameter = modular_server_.createParameter(constants::sequence_count_parameter_name);
   sequence_count_parameter.setRange(constants::sequence_count_min,constants::sequence_count_max);
   sequence_count_parameter.setUnits(digital_controller::constants::ms_units);
+
+  modular_server::Parameter & step_delay_parameter = modular_server_.createParameter(constants::step_delay_parameter_name);
+  step_delay_parameter.setRange(constants::step_delay_min,constants::step_delay_max);
+  step_delay_parameter.setUnits(constants::seconds_units);
 
   modular_server::Parameter & step_duration_parameter = modular_server_.createParameter(constants::step_duration_parameter_name);
   step_duration_parameter.setRange(constants::step_duration_min,constants::step_duration_max);
@@ -110,6 +111,7 @@ void FlyBowlController::setup()
   add_experiment_step_function.addParameter(pulse_count_parameter);
   add_experiment_step_function.addParameter(sequence_off_duration_parameter);
   add_experiment_step_function.addParameter(sequence_count_parameter);
+  add_experiment_step_function.addParameter(step_delay_parameter);
   add_experiment_step_function.addParameter(step_duration_parameter);
   add_experiment_step_function.setResultTypeLong();
 
@@ -337,6 +339,7 @@ int FlyBowlController::addExperimentStep(long power,
   long pulse_count,
   long sequence_off_duration,
   long sequence_count,
+  double step_delay,
   double step_duration)
 {
   if (experiment_steps_.full())
@@ -350,6 +353,7 @@ int FlyBowlController::addExperimentStep(long power,
   experiment_step.pulse_count = pulse_count;
   experiment_step.sequence_off_duration = sequence_off_duration;
   experiment_step.sequence_count = sequence_count;
+  experiment_step.step_delay = step_delay;
   experiment_step.step_duration = step_duration;
 
   experiment_steps_.push_back(experiment_step);
@@ -370,18 +374,7 @@ void FlyBowlController::runExperiment()
     return;
   }
 
-  experiment_status_.state_ptr = &constants::state_delaying_before_starting_experiment_string;
-
-  double experiment_delay;
-  modular_server::Property & experiment_delay_property = modular_server_.property(constants::experiment_delay_property_name);
-  experiment_delay_property.getValue(experiment_delay);
-
-  long experiment_delay_ms = experiment_delay * constants::ms_per_second;
-
-  EventId start_experiment_event_id = event_controller_.addEventUsingDelay(
-    makeFunctor((Functor1<int> *)0,*this,&FlyBowlController::startExperimentHandler),
-    experiment_delay_ms);
-  event_controller_.enable(start_experiment_event_id);
+  startExperiment();
 }
 
 void FlyBowlController::stopExperiment()
@@ -491,7 +484,7 @@ void FlyBowlController::startExperimentStep()
   experiment_status_.sequence_index = 0;
   experiment_status_.sequence_count = experiment_step.sequence_count;
 
-  long sequence_delay = 0;
+  long sequence_delay = experiment_step.step_delay * constants::ms_per_second;
 
   long sequence_period = experiment_step.pulse_period * experiment_step.pulse_count;
   sequence_period += experiment_step.sequence_off_duration;
@@ -696,6 +689,8 @@ void FlyBowlController::addExperimentStepHandler()
   modular_server_.parameter(constants::sequence_off_duration_parameter_name).getValue(sequence_off_duration);
   long sequence_count;
   modular_server_.parameter(constants::sequence_count_parameter_name).getValue(sequence_count);
+  double step_delay;
+  modular_server_.parameter(constants::step_delay_parameter_name).getValue(step_delay);
   double step_duration;
   modular_server_.parameter(constants::step_duration_parameter_name).getValue(step_duration);
 
@@ -705,6 +700,7 @@ void FlyBowlController::addExperimentStepHandler()
     pulse_count,
     sequence_off_duration,
     sequence_count,
+    step_delay,
     step_duration);
 
   if (experiment_step_index == constants::NO_EXPERIMENT_STEP_SPACE_LEFT_INDEX)
@@ -739,6 +735,8 @@ void FlyBowlController::getExperimentStepsHandler()
       experiment_step.sequence_off_duration);
     modular_server_.response().write(constants::sequence_count_parameter_name,
       experiment_step.sequence_count);
+    modular_server_.response().write(constants::step_delay_parameter_name,
+      experiment_step.step_delay);
     modular_server_.response().write(constants::step_duration_parameter_name,
       experiment_step.step_duration);
 
@@ -823,11 +821,6 @@ void FlyBowlController::visibleBacklightStopPwmHandler(int pwm_index)
   {
     experiment_status_.sequence_index++;
   }
-}
-
-void FlyBowlController::startExperimentHandler(int arg)
-{
-  startExperiment();
 }
 
 void FlyBowlController::startSequenceHandler(int arg)

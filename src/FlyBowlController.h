@@ -56,6 +56,7 @@ public:
     long pulse_count,
     long sequence_off_duration,
     long sequence_count,
+    double step_delay,
     double step_duration);
 
   void removeAllExperimentSteps();
@@ -119,7 +120,6 @@ private:
   void visibleBacklightStartPwmHandler(int pwm_index);
   void visibleBacklightStopPwmHandler(int pwm_index);
 
-  void startExperimentHandler(int arg);
   void startSequenceHandler(int arg);
   void stopExperimentStepHandler(int arg);
 };

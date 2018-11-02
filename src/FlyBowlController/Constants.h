@@ -16,8 +16,8 @@ namespace fly_bowl_controller
 namespace constants
 {
 //MAX values must be >= 1, >= created/copied count, < RAM limit
-enum{PROPERTY_COUNT_MAX=2};
-enum{PARAMETER_COUNT_MAX=7};
+enum{PROPERTY_COUNT_MAX=1};
+enum{PARAMETER_COUNT_MAX=8};
 enum{FUNCTION_COUNT_MAX=6};
 enum{CALLBACK_COUNT_MAX=7};
 
@@ -46,6 +46,7 @@ struct ExperimentStep
   long pulse_count;
   long sequence_off_duration;
   long sequence_count;
+  double step_delay;
   double step_duration;
 };
 
@@ -68,7 +69,6 @@ extern const long ms_per_second;
 
 extern ConstantString state_string;
 extern ConstantString state_experiment_not_running_string;
-extern ConstantString state_delaying_before_starting_experiment_string;
 extern ConstantString state_experiment_running_string;
 
 extern ConstantString experiment_step_index_string;
@@ -85,11 +85,6 @@ extern ConstantString seconds_units;
 // Property values must be long, double, bool, long[], double[], bool[], char[], ConstantString *, (ConstantString *)[]
 extern ConstantString fly_bowls_enabled_property_name;
 extern const bool fly_bowls_enabled_element_default;
-
-extern ConstantString experiment_delay_property_name;
-extern const double experiment_delay_min;
-extern const double experiment_delay_max;
-extern const double experiment_delay_default;
 
 // Parameters
 extern ConstantString pulse_delay_parameter_name;
@@ -115,6 +110,10 @@ extern const long sequence_off_duration_max;
 extern ConstantString sequence_count_parameter_name;
 extern const long sequence_count_min;
 extern const long sequence_count_max;
+
+extern ConstantString step_delay_parameter_name;
+extern const double step_delay_min;
+extern const double step_delay_max;
 
 extern ConstantString step_duration_parameter_name;
 extern const double step_duration_min;
