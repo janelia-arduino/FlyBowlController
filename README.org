@@ -80,7 +80,7 @@
 
   [[https://github.com/janelia-modular-devices/backlight_controller]]
 
-  [[https://github.com/janelia-modular-devices/fly_bowl_controller
+  [[https://github.com/janelia-modular-devices/fly_bowl_controller]]
 
 * More Detailed Modular Device Information
 
