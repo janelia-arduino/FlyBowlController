@@ -20,7 +20,7 @@ const modular_server::FirmwareInfo firmware_info =
 {
   .name_ptr=&firmware_name,
   .version_major=1,
-  .version_minor=0,
+  .version_minor=1,
   .version_patch=0,
 };
 
@@ -91,8 +91,10 @@ CONSTANT_STRING(get_experiment_status_function_name,"getExperimentStatus");
 // Callbacks
 CONSTANT_STRING(set_ir_backlights_on_callback_name,"setIrBacklightsOn");
 CONSTANT_STRING(set_ir_backlights_off_callback_name,"setIrBacklightsOff");
+CONSTANT_STRING(toggle_ir_backlights_callback_name,"toggleIrBacklights");
 CONSTANT_STRING(set_visible_backlights_on_callback_name,"setVisibleBacklightsOn");
 CONSTANT_STRING(set_visible_backlights_off_callback_name,"setVisibleBacklightsOff");
+CONSTANT_STRING(toggle_visible_backlights_callback_name,"toggleVisibleBacklights");
 CONSTANT_STRING(remove_all_experiment_steps_callback_name,"removeAllExperimentSteps");
 CONSTANT_STRING(run_experiment_callback_name,"runExperiment");
 CONSTANT_STRING(stop_experiment_callback_name,"stopExperiment");

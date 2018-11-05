@@ -19,7 +19,7 @@ namespace constants
 enum{PROPERTY_COUNT_MAX=1};
 enum{PARAMETER_COUNT_MAX=8};
 enum{FUNCTION_COUNT_MAX=6};
-enum{CALLBACK_COUNT_MAX=7};
+enum{CALLBACK_COUNT_MAX=9};
 
 enum{EXPERIMENT_STEP_COUNT_MAX=32};
 
@@ -130,8 +130,10 @@ extern ConstantString get_experiment_status_function_name;
 // Callbacks
 extern ConstantString set_ir_backlights_on_callback_name;
 extern ConstantString set_ir_backlights_off_callback_name;
+extern ConstantString toggle_ir_backlights_callback_name;
 extern ConstantString set_visible_backlights_on_callback_name;
 extern ConstantString set_visible_backlights_off_callback_name;
+extern ConstantString toggle_visible_backlights_callback_name;
 extern ConstantString remove_all_experiment_steps_callback_name;
 extern ConstantString run_experiment_callback_name;
 extern ConstantString stop_experiment_callback_name;

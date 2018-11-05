@@ -32,17 +32,21 @@ public:
     long power);
   void setIrBacklightOn(size_t fly_bowl);
   void setIrBacklightOff(size_t fly_bowl);
+  void toggleIrBacklight(size_t fly_bowl);
   void setIrBacklightsOnAtPower(long power);
   void setIrBacklightsOn();
   void setIrBacklightsOff();
+  void toggleIrBacklights();
 
   void setVisibleBacklightOnAtPower(size_t fly_bowl,
     long power);
   void setVisibleBacklightOn(size_t fly_bowl);
   void setVisibleBacklightOff(size_t fly_bowl);
+  void toggleVisibleBacklight(size_t fly_bowl);
   void setVisibleBacklightsOnAtPower(long power);
   void setVisibleBacklightsOn();
   void setVisibleBacklightsOff();
+  void toggleVisibleBacklights();
 
   digital_controller::constants::PwmId addVisibleBacklightsPwm(long power,
     long pulse_delay,
@@ -104,9 +108,11 @@ private:
   void setIrBacklightsOnAtPowerHandler();
   void setIrBacklightsOnHandler(modular_server::Pin * pin_ptr);
   void setIrBacklightsOffHandler(modular_server::Pin * pin_ptr);
+  void toggleIrBacklightsHandler(modular_server::Pin * pin_ptr);
   void setVisibleBacklightsOnAtPowerHandler();
   void setVisibleBacklightsOnHandler(modular_server::Pin * pin_ptr);
   void setVisibleBacklightsOffHandler(modular_server::Pin * pin_ptr);
+  void toggleVisibleBacklightsHandler(modular_server::Pin * pin_ptr);
   void addVisibleBacklightsPwmHandler();
   void addExperimentStepHandler();
   void getExperimentStepsHandler();

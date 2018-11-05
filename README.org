@@ -4,7 +4,7 @@
 
 * Library Information
   - Name :: FlyBowlController
-  - Version :: 1.0.0
+  - Version :: 1.1.0
   - License :: BSD
   - URL :: https://github.com/janelia-arduino/FlyBowlController
   - Author :: Peter Polidoro
@@ -17,7 +17,47 @@
 * API NAMES
 
   #+BEGIN_SRC js
-
+    {
+      "id": "getApi",
+      "result": {
+        "firmware": [
+          "FlyBowlController"
+        ],
+        "verbosity": "NAMES",
+        "functions": [
+          "setIrBacklightsOnAtPower",
+          "setVisibleBacklightsOnAtPower",
+          "addVisibleBacklightsPwm",
+          "addExperimentStep",
+          "getExperimentSteps",
+          "getExperimentStatus"
+        ],
+        "parameters": [
+          "pulse_delay",
+          "pulse_period",
+          "pulse_on_duration",
+          "pulse_count",
+          "sequence_off_duration",
+          "sequence_count",
+          "step_delay",
+          "step_duration"
+        ],
+        "properties": [
+          "flyBowlsEnabled"
+        ],
+        "callbacks": [
+          "setIrBacklightsOn",
+          "setIrBacklightsOff",
+          "toggleIrBacklights",
+          "setVisibleBacklightsOn",
+          "setVisibleBacklightsOff",
+          "toggleVisibleBacklights",
+          "removeAllExperimentSteps",
+          "runExperiment",
+          "stopExperiment"
+        ]
+      }
+    }
   #+END_SRC
 
 * API GENERAL
