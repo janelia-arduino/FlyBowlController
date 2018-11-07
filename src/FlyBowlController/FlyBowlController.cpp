@@ -160,7 +160,7 @@ void FlyBowlController::setup()
 
 
 void FlyBowlController::setIrBacklightOnAtPower(size_t fly_bowl,
-  long power)
+  double power)
 {
   if (fly_bowl >= getFlyBowlCount())
   {
@@ -221,7 +221,7 @@ void FlyBowlController::toggleIrBacklight(size_t fly_bowl)
   if (fly_bowl_enabled)
   {
     BacklightController::toggleIrBacklight(constants::fly_bowl_ir_backlights[fly_bowl]);
-    long power = getIrBacklightPower(constants::fly_bowl_ir_backlights[fly_bowl]);
+    double power = getIrBacklightPower(constants::fly_bowl_ir_backlights[fly_bowl]);
     if (power > 0)
     {
       setFanOn(fly_bowl);
@@ -233,7 +233,7 @@ void FlyBowlController::toggleIrBacklight(size_t fly_bowl)
   }
 }
 
-void FlyBowlController::setIrBacklightsOnAtPower(long power)
+void FlyBowlController::setIrBacklightsOnAtPower(double power)
 {
   for (size_t fly_bowl=0; fly_bowl<getFlyBowlCount(); ++fly_bowl)
   {
@@ -266,7 +266,7 @@ void FlyBowlController::toggleIrBacklights()
 }
 
 void FlyBowlController::setVisibleBacklightOnAtPower(size_t fly_bowl,
-  long power)
+  double power)
 {
   if (fly_bowl >= getFlyBowlCount())
   {
@@ -327,7 +327,7 @@ void FlyBowlController::toggleVisibleBacklight(size_t fly_bowl)
   if (fly_bowl_enabled)
   {
     BacklightController::toggleVisibleBacklight(constants::fly_bowl_visible_backlights[fly_bowl]);
-    long power = getVisibleBacklightPower(constants::fly_bowl_visible_backlights[fly_bowl]);
+    double power = getVisibleBacklightPower(constants::fly_bowl_visible_backlights[fly_bowl]);
     if (power > 0)
     {
       setIndicatorOn(fly_bowl);
@@ -339,7 +339,7 @@ void FlyBowlController::toggleVisibleBacklight(size_t fly_bowl)
   }
 }
 
-void FlyBowlController::setVisibleBacklightsOnAtPower(long power)
+void FlyBowlController::setVisibleBacklightsOnAtPower(double power)
 {
   for (size_t fly_bowl=0; fly_bowl<getFlyBowlCount(); ++fly_bowl)
   {
@@ -371,7 +371,7 @@ void FlyBowlController::toggleVisibleBacklights()
   }
 }
 
-digital_controller::constants::PwmId FlyBowlController::addVisibleBacklightsPwm(long power,
+digital_controller::constants::PwmId FlyBowlController::addVisibleBacklightsPwm(double power,
   long pulse_delay,
   long pulse_period,
   long pulse_on_duration,
@@ -412,7 +412,7 @@ digital_controller::constants::PwmId FlyBowlController::addVisibleBacklightsPwm(
   return pwm_id;
 }
 
-int FlyBowlController::addExperimentStep(long power,
+int FlyBowlController::addExperimentStep(double power,
   long pulse_period,
   long pulse_on_duration,
   long pulse_count,
@@ -699,7 +699,7 @@ void FlyBowlController::setFlyBowlEnabledHandler(size_t fly_bowl)
 
 void FlyBowlController::setIrBacklightsOnAtPowerHandler()
 {
-  long power;
+  double power;
   modular_server_.parameter(digital_controller::constants::power_parameter_name).getValue(power);
 
   setIrBacklightsOnAtPower(power);
@@ -722,7 +722,7 @@ void FlyBowlController::toggleIrBacklightsHandler(modular_server::Pin * pin_ptr)
 
 void FlyBowlController::setVisibleBacklightsOnAtPowerHandler()
 {
-  long power;
+  double power;
   modular_server_.parameter(digital_controller::constants::power_parameter_name).getValue(power);
 
   setVisibleBacklightsOnAtPower(power);
@@ -745,7 +745,7 @@ void FlyBowlController::toggleVisibleBacklightsHandler(modular_server::Pin * pin
 
 void FlyBowlController::addVisibleBacklightsPwmHandler()
 {
-  long power;
+  double power;
   modular_server_.parameter(digital_controller::constants::power_parameter_name).getValue(power);
   long pulse_delay;
   modular_server_.parameter(constants::pulse_delay_parameter_name).getValue(pulse_delay);
@@ -766,7 +766,7 @@ void FlyBowlController::addVisibleBacklightsPwmHandler()
 
 void FlyBowlController::addExperimentStepHandler()
 {
-  long power;
+  double power;
   modular_server_.parameter(digital_controller::constants::power_parameter_name).getValue(power);
   long pulse_period;
   modular_server_.parameter(constants::pulse_period_parameter_name).getValue(pulse_period);
@@ -877,7 +877,7 @@ void FlyBowlController::visibleBacklightStartPulseHandler(int pwm_index)
 {
   uint32_t visible_backlight_channels = pwm_infos_[pwm_index].visible_backlight_channels;
   visible_backlight_channels &= visible_backlights_enabled_mask_;
-  long power = pwm_infos_[pwm_index].power;
+  double power = pwm_infos_[pwm_index].power;
   setChannelsOnAtPower(visible_backlight_channels,power);
 
   uint32_t indicator_channels = pwm_infos_[pwm_index].indicator_channels;

@@ -19,13 +19,13 @@ CONSTANT_STRING(firmware_name,"FlyBowlController");
 const modular_server::FirmwareInfo firmware_info =
 {
   .name_ptr=&firmware_name,
-  .version_major=1,
-  .version_minor=1,
+  .version_major=2,
+  .version_minor=0,
   .version_patch=0,
 };
 
-const long fan_power_min = 100;
-const long fan_power_max = 100;
+const double fan_power_min = 100.0;
+const double fan_power_max = 100.0;
 
 const long ms_per_second = 1000;
 

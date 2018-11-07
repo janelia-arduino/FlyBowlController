@@ -28,19 +28,19 @@ extern ConstantString device_name;
 extern ConstantString firmware_name;
 extern const modular_server::FirmwareInfo firmware_info;
 
-extern const long fan_power_min;
-extern const long fan_power_max;
+extern const double fan_power_min;
+extern const double fan_power_max;
 
 struct PwmInfo
 {
   uint32_t visible_backlight_channels;
-  long power;
+  double power;
   uint32_t indicator_channels;
 };
 
 struct ExperimentStep
 {
-  long power;
+  double power;
   long pulse_period;
   long pulse_on_duration;
   long pulse_count;

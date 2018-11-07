@@ -29,32 +29,32 @@ public:
   virtual void setup();
 
   void setIrBacklightOnAtPower(size_t fly_bowl,
-    long power);
+    double power);
   void setIrBacklightOn(size_t fly_bowl);
   void setIrBacklightOff(size_t fly_bowl);
   void toggleIrBacklight(size_t fly_bowl);
-  void setIrBacklightsOnAtPower(long power);
+  void setIrBacklightsOnAtPower(double power);
   void setIrBacklightsOn();
   void setIrBacklightsOff();
   void toggleIrBacklights();
 
   void setVisibleBacklightOnAtPower(size_t fly_bowl,
-    long power);
+    double power);
   void setVisibleBacklightOn(size_t fly_bowl);
   void setVisibleBacklightOff(size_t fly_bowl);
   void toggleVisibleBacklight(size_t fly_bowl);
-  void setVisibleBacklightsOnAtPower(long power);
+  void setVisibleBacklightsOnAtPower(double power);
   void setVisibleBacklightsOn();
   void setVisibleBacklightsOff();
   void toggleVisibleBacklights();
 
-  digital_controller::constants::PwmId addVisibleBacklightsPwm(long power,
+  digital_controller::constants::PwmId addVisibleBacklightsPwm(double power,
     long pulse_delay,
     long pulse_period,
     long pulse_on_duration,
     long pulse_count);
 
-  int addExperimentStep(long power,
+  int addExperimentStep(double power,
     long pulse_period,
     long pulse_on_duration,
     long pulse_count,
