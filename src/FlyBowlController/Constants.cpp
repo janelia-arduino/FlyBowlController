@@ -74,11 +74,11 @@ const long sequence_count_max = 2000000000;
 
 CONSTANT_STRING(step_delay_parameter_name,"step_delay");
 const double step_delay_min = 0.0;
-const double step_delay_max = 120.0;
+const double step_delay_max = 3600.0;
 
 CONSTANT_STRING(step_duration_parameter_name,"step_duration");
-const double step_duration_min = 10.0;
-const double step_duration_max = 2000.0;
+const double step_duration_min = 1.0;
+const double step_duration_max = 86400.0;
 
 // Function
 CONSTANT_STRING(set_ir_backlights_on_at_power_function_name,"setIrBacklightsOnAtPower");
