@@ -173,7 +173,15 @@ void FlyBowlController::setIrBacklightOnAtPower(size_t fly_bowl,
 
   if (fly_bowl_enabled)
   {
-    setFanOn(fly_bowl);
+    double power_lower_bound = getPowerLowerBound(irBacklightToDigitalChannel(constants::fly_bowl_ir_backlights[fly_bowl]));
+    if (power > power_lower_bound)
+    {
+      setFanOn(fly_bowl);
+    }
+    else
+    {
+      setFanOff(fly_bowl);
+    }
     BacklightController::setIrBacklightOnAtPower(constants::fly_bowl_ir_backlights[fly_bowl],power);
   }
 }
@@ -191,7 +199,16 @@ void FlyBowlController::setIrBacklightOn(size_t fly_bowl)
 
   if (fly_bowl_enabled)
   {
-    setFanOn(fly_bowl);
+    double power = getIrBacklightPowerWhenOn(constants::fly_bowl_ir_backlights[fly_bowl]);
+    double power_lower_bound = getPowerLowerBound(irBacklightToDigitalChannel(constants::fly_bowl_ir_backlights[fly_bowl]));
+    if (power > power_lower_bound)
+    {
+      setFanOn(fly_bowl);
+    }
+    else
+    {
+      setFanOff(fly_bowl);
+    }
     BacklightController::setIrBacklightOn(constants::fly_bowl_ir_backlights[fly_bowl]);
   }
 }
@@ -222,7 +239,8 @@ void FlyBowlController::toggleIrBacklight(size_t fly_bowl)
   {
     BacklightController::toggleIrBacklight(constants::fly_bowl_ir_backlights[fly_bowl]);
     double power = getIrBacklightPower(constants::fly_bowl_ir_backlights[fly_bowl]);
-    if (power > 0)
+    double power_lower_bound = getPowerLowerBound(irBacklightToDigitalChannel(constants::fly_bowl_ir_backlights[fly_bowl]));
+    if (power > power_lower_bound)
     {
       setFanOn(fly_bowl);
     }
@@ -279,7 +297,15 @@ void FlyBowlController::setVisibleBacklightOnAtPower(size_t fly_bowl,
 
   if (fly_bowl_enabled)
   {
-    setIndicatorOn(fly_bowl);
+    double power_lower_bound = getPowerLowerBound(visibleBacklightToDigitalChannel(constants::fly_bowl_visible_backlights[fly_bowl]));
+    if (power > power_lower_bound)
+    {
+      setIndicatorOn(fly_bowl);
+    }
+    else
+    {
+      setIndicatorOff(fly_bowl);
+    }
     BacklightController::setVisibleBacklightOnAtPower(constants::fly_bowl_visible_backlights[fly_bowl],power);
   }
 }
@@ -297,7 +323,16 @@ void FlyBowlController::setVisibleBacklightOn(size_t fly_bowl)
 
   if (fly_bowl_enabled)
   {
-    setIndicatorOn(fly_bowl);
+    double power = getVisibleBacklightPowerWhenOn(constants::fly_bowl_visible_backlights[fly_bowl]);
+    double power_lower_bound = getPowerLowerBound(visibleBacklightToDigitalChannel(constants::fly_bowl_visible_backlights[fly_bowl]));
+    if (power > power_lower_bound)
+    {
+      setIndicatorOn(fly_bowl);
+    }
+    else
+    {
+      setIndicatorOff(fly_bowl);
+    }
     BacklightController::setVisibleBacklightOn(constants::fly_bowl_visible_backlights[fly_bowl]);
   }
 }
@@ -328,7 +363,8 @@ void FlyBowlController::toggleVisibleBacklight(size_t fly_bowl)
   {
     BacklightController::toggleVisibleBacklight(constants::fly_bowl_visible_backlights[fly_bowl]);
     double power = getVisibleBacklightPower(constants::fly_bowl_visible_backlights[fly_bowl]);
-    if (power > 0)
+    double power_lower_bound = getPowerLowerBound(visibleBacklightToDigitalChannel(constants::fly_bowl_visible_backlights[fly_bowl]));
+    if (power > power_lower_bound)
     {
       setIndicatorOn(fly_bowl);
     }
