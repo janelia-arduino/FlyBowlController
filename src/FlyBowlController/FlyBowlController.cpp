@@ -546,6 +546,10 @@ void FlyBowlController::startExperiment()
 {
   experiment_status_.state_ptr = &constants::state_experiment_running_string;
 
+  stopAllPwm();
+  event_controller_.clearAllEvents();
+  setVisibleBacklightsOff();
+
   startExperimentStep();
 }
 
