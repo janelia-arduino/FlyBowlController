@@ -54,7 +54,7 @@ void FlyBowlController::setup()
   initializeEnabledMasks();
 
   // Parameters
-  modular_server::Parameter & power_parameter = modular_server_.parameter(digital_controller::constants::power_parameter_name);
+  modular_server::Parameter & intensity_parameter = modular_server_.parameter(backlight_controller::constants::intensity_parameter_name);
 
   modular_server::Parameter & pulse_delay_parameter = modular_server_.createParameter(constants::pulse_delay_parameter_name);
   pulse_delay_parameter.setRange(constants::pulse_delay_min,constants::pulse_delay_max);
@@ -89,17 +89,17 @@ void FlyBowlController::setup()
   step_duration_parameter.setUnits(constants::seconds_units);
 
   // Functions
-  modular_server::Function & set_ir_backlights_on_at_power_function = modular_server_.createFunction(constants::set_ir_backlights_on_at_power_function_name);
-  set_ir_backlights_on_at_power_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&FlyBowlController::setIrBacklightsOnAtPowerHandler));
-  set_ir_backlights_on_at_power_function.addParameter(power_parameter);
+  modular_server::Function & set_ir_backlights_on_at_intensity_function = modular_server_.createFunction(constants::set_ir_backlights_on_at_intensity_function_name);
+  set_ir_backlights_on_at_intensity_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&FlyBowlController::setIrBacklightsOnAtIntensityHandler));
+  set_ir_backlights_on_at_intensity_function.addParameter(intensity_parameter);
 
-  modular_server::Function & set_visible_backlights_on_at_power_function = modular_server_.createFunction(constants::set_visible_backlights_on_at_power_function_name);
-  set_visible_backlights_on_at_power_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&FlyBowlController::setVisibleBacklightsOnAtPowerHandler));
-  set_visible_backlights_on_at_power_function.addParameter(power_parameter);
+  modular_server::Function & set_visible_backlights_on_at_intensity_function = modular_server_.createFunction(constants::set_visible_backlights_on_at_intensity_function_name);
+  set_visible_backlights_on_at_intensity_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&FlyBowlController::setVisibleBacklightsOnAtIntensityHandler));
+  set_visible_backlights_on_at_intensity_function.addParameter(intensity_parameter);
 
   modular_server::Function & add_visible_backlights_pwm_function = modular_server_.createFunction(constants::add_visible_backlights_pwm_function_name);
   add_visible_backlights_pwm_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&FlyBowlController::addVisibleBacklightsPwmHandler));
-  add_visible_backlights_pwm_function.addParameter(power_parameter);
+  add_visible_backlights_pwm_function.addParameter(intensity_parameter);
   add_visible_backlights_pwm_function.addParameter(pulse_delay_parameter);
   add_visible_backlights_pwm_function.addParameter(pulse_period_parameter);
   add_visible_backlights_pwm_function.addParameter(pulse_on_duration_parameter);
@@ -108,7 +108,7 @@ void FlyBowlController::setup()
 
   modular_server::Function & add_experiment_step_function = modular_server_.createFunction(constants::add_experiment_step_function_name);
   add_experiment_step_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&FlyBowlController::addExperimentStepHandler));
-  add_experiment_step_function.addParameter(power_parameter);
+  add_experiment_step_function.addParameter(intensity_parameter);
   add_experiment_step_function.addParameter(pulse_period_parameter);
   add_experiment_step_function.addParameter(pulse_on_duration_parameter);
   add_experiment_step_function.addParameter(pulse_count_parameter);
@@ -159,8 +159,8 @@ void FlyBowlController::setup()
 }
 
 
-void FlyBowlController::setIrBacklightOnAtPower(size_t fly_bowl,
-  double power)
+void FlyBowlController::setIrBacklightOnAtIntensity(size_t fly_bowl,
+  double intensity)
 {
   if (fly_bowl >= getFlyBowlCount())
   {
@@ -173,8 +173,8 @@ void FlyBowlController::setIrBacklightOnAtPower(size_t fly_bowl,
 
   if (fly_bowl_enabled)
   {
-    double power_lower_bound = getPowerLowerBound(irBacklightToDigitalChannel(constants::fly_bowl_ir_backlights[fly_bowl]));
-    if (power > power_lower_bound)
+    double intensity_lower_bound = getIrBacklightIntensityLowerBound(constants::fly_bowl_ir_backlights[fly_bowl]);
+    if (intensity > intensity_lower_bound)
     {
       setFanOn(fly_bowl);
     }
@@ -182,7 +182,7 @@ void FlyBowlController::setIrBacklightOnAtPower(size_t fly_bowl,
     {
       setFanOff(fly_bowl);
     }
-    BacklightController::setIrBacklightOnAtPower(constants::fly_bowl_ir_backlights[fly_bowl],power);
+    BacklightController::setIrBacklightOnAtIntensity(constants::fly_bowl_ir_backlights[fly_bowl],intensity);
   }
 }
 
@@ -199,9 +199,9 @@ void FlyBowlController::setIrBacklightOn(size_t fly_bowl)
 
   if (fly_bowl_enabled)
   {
-    double power = getIrBacklightPowerWhenOn(constants::fly_bowl_ir_backlights[fly_bowl]);
-    double power_lower_bound = getPowerLowerBound(irBacklightToDigitalChannel(constants::fly_bowl_ir_backlights[fly_bowl]));
-    if (power > power_lower_bound)
+    double intensity = getIrBacklightIntensityWhenOn(constants::fly_bowl_ir_backlights[fly_bowl]);
+    double intensity_lower_bound = getIntensityLowerBound(irBacklightToDigitalChannel(constants::fly_bowl_ir_backlights[fly_bowl]));
+    if (intensity > intensity_lower_bound)
     {
       setFanOn(fly_bowl);
     }
@@ -238,9 +238,9 @@ void FlyBowlController::toggleIrBacklight(size_t fly_bowl)
   if (fly_bowl_enabled)
   {
     BacklightController::toggleIrBacklight(constants::fly_bowl_ir_backlights[fly_bowl]);
-    double power = getIrBacklightPower(constants::fly_bowl_ir_backlights[fly_bowl]);
-    double power_lower_bound = getPowerLowerBound(irBacklightToDigitalChannel(constants::fly_bowl_ir_backlights[fly_bowl]));
-    if (power > power_lower_bound)
+    double intensity = getIrBacklightIntensity(constants::fly_bowl_ir_backlights[fly_bowl]);
+    double intensity_lower_bound = getIntensityLowerBound(irBacklightToDigitalChannel(constants::fly_bowl_ir_backlights[fly_bowl]));
+    if (intensity > intensity_lower_bound)
     {
       setFanOn(fly_bowl);
     }
@@ -251,11 +251,11 @@ void FlyBowlController::toggleIrBacklight(size_t fly_bowl)
   }
 }
 
-void FlyBowlController::setIrBacklightsOnAtPower(double power)
+void FlyBowlController::setIrBacklightsOnAtIntensity(double intensity)
 {
   for (size_t fly_bowl=0; fly_bowl<getFlyBowlCount(); ++fly_bowl)
   {
-    setIrBacklightOnAtPower(fly_bowl,power);
+    setIrBacklightOnAtIntensity(fly_bowl,intensity);
   }
 }
 
@@ -283,8 +283,8 @@ void FlyBowlController::toggleIrBacklights()
   }
 }
 
-void FlyBowlController::setVisibleBacklightOnAtPower(size_t fly_bowl,
-  double power)
+void FlyBowlController::setVisibleBacklightOnAtIntensity(size_t fly_bowl,
+  double intensity)
 {
   if (fly_bowl >= getFlyBowlCount())
   {
@@ -297,8 +297,8 @@ void FlyBowlController::setVisibleBacklightOnAtPower(size_t fly_bowl,
 
   if (fly_bowl_enabled)
   {
-    double power_lower_bound = getPowerLowerBound(visibleBacklightToDigitalChannel(constants::fly_bowl_visible_backlights[fly_bowl]));
-    if (power > power_lower_bound)
+    double intensity_lower_bound = getIntensityLowerBound(visibleBacklightToDigitalChannel(constants::fly_bowl_visible_backlights[fly_bowl]));
+    if (intensity > intensity_lower_bound)
     {
       setIndicatorOn(fly_bowl);
     }
@@ -306,7 +306,7 @@ void FlyBowlController::setVisibleBacklightOnAtPower(size_t fly_bowl,
     {
       setIndicatorOff(fly_bowl);
     }
-    BacklightController::setVisibleBacklightOnAtPower(constants::fly_bowl_visible_backlights[fly_bowl],power);
+    BacklightController::setVisibleBacklightOnAtIntensity(constants::fly_bowl_visible_backlights[fly_bowl],intensity);
   }
 }
 
@@ -323,9 +323,9 @@ void FlyBowlController::setVisibleBacklightOn(size_t fly_bowl)
 
   if (fly_bowl_enabled)
   {
-    double power = getVisibleBacklightPowerWhenOn(constants::fly_bowl_visible_backlights[fly_bowl]);
-    double power_lower_bound = getPowerLowerBound(visibleBacklightToDigitalChannel(constants::fly_bowl_visible_backlights[fly_bowl]));
-    if (power > power_lower_bound)
+    double intensity = getVisibleBacklightIntensityWhenOn(constants::fly_bowl_visible_backlights[fly_bowl]);
+    double intensity_lower_bound = getIntensityLowerBound(visibleBacklightToDigitalChannel(constants::fly_bowl_visible_backlights[fly_bowl]));
+    if (intensity > intensity_lower_bound)
     {
       setIndicatorOn(fly_bowl);
     }
@@ -362,9 +362,9 @@ void FlyBowlController::toggleVisibleBacklight(size_t fly_bowl)
   if (fly_bowl_enabled)
   {
     BacklightController::toggleVisibleBacklight(constants::fly_bowl_visible_backlights[fly_bowl]);
-    double power = getVisibleBacklightPower(constants::fly_bowl_visible_backlights[fly_bowl]);
-    double power_lower_bound = getPowerLowerBound(visibleBacklightToDigitalChannel(constants::fly_bowl_visible_backlights[fly_bowl]));
-    if (power > power_lower_bound)
+    double intensity = getVisibleBacklightIntensity(constants::fly_bowl_visible_backlights[fly_bowl]);
+    double intensity_lower_bound = getIntensityLowerBound(visibleBacklightToDigitalChannel(constants::fly_bowl_visible_backlights[fly_bowl]));
+    if (intensity > intensity_lower_bound)
     {
       setIndicatorOn(fly_bowl);
     }
@@ -375,11 +375,11 @@ void FlyBowlController::toggleVisibleBacklight(size_t fly_bowl)
   }
 }
 
-void FlyBowlController::setVisibleBacklightsOnAtPower(double power)
+void FlyBowlController::setVisibleBacklightsOnAtIntensity(double intensity)
 {
   for (size_t fly_bowl=0; fly_bowl<getFlyBowlCount(); ++fly_bowl)
   {
-    setVisibleBacklightOnAtPower(fly_bowl,power);
+    setVisibleBacklightOnAtIntensity(fly_bowl,intensity);
   }
 }
 
@@ -407,7 +407,7 @@ void FlyBowlController::toggleVisibleBacklights()
   }
 }
 
-digital_controller::constants::PwmId FlyBowlController::addVisibleBacklightsPwm(double power,
+digital_controller::constants::PwmId FlyBowlController::addVisibleBacklightsPwm(double intensity,
   long pulse_delay,
   long pulse_period,
   long pulse_on_duration,
@@ -430,7 +430,7 @@ digital_controller::constants::PwmId FlyBowlController::addVisibleBacklightsPwm(
     indicator_channels |= (bit << channel);
   }
   digital_controller::constants::PwmId pwm_id = addPwm(visible_backlight_channels,
-    power,
+    intensity,
     pulse_delay,
     pulse_period,
     pulse_on_duration,
@@ -442,13 +442,13 @@ digital_controller::constants::PwmId FlyBowlController::addVisibleBacklightsPwm(
   if (pwm_id.index >= 0)
   {
     pwm_infos_[pwm_id.index].visible_backlight_channels = visible_backlight_channels;
-    pwm_infos_[pwm_id.index].power = power;
+    pwm_infos_[pwm_id.index].intensity = intensity;
     pwm_infos_[pwm_id.index].indicator_channels = indicator_channels;
   }
   return pwm_id;
 }
 
-int FlyBowlController::addExperimentStep(double power,
+int FlyBowlController::addExperimentStep(double intensity,
   long pulse_period,
   long pulse_on_duration,
   long pulse_count,
@@ -462,7 +462,7 @@ int FlyBowlController::addExperimentStep(double power,
     return constants::NO_EXPERIMENT_STEP_SPACE_LEFT_INDEX;
   }
   constants::ExperimentStep experiment_step;
-  experiment_step.power = power;
+  experiment_step.intensity = intensity;
   experiment_step.pulse_period = pulse_period;
   experiment_step.pulse_on_duration = pulse_on_duration;
   experiment_step.pulse_count = pulse_count;
@@ -636,7 +636,7 @@ void FlyBowlController::startSequence()
 
   long pulse_delay = 0;
 
-  experiment_status_.pwm_id = addVisibleBacklightsPwm(experiment_step.power,
+  experiment_status_.pwm_id = addVisibleBacklightsPwm(experiment_step.intensity,
     pulse_delay,
     experiment_step.pulse_period,
     experiment_step.pulse_on_duration,
@@ -737,12 +737,12 @@ void FlyBowlController::setFlyBowlEnabledHandler(size_t fly_bowl)
   }
 }
 
-void FlyBowlController::setIrBacklightsOnAtPowerHandler()
+void FlyBowlController::setIrBacklightsOnAtIntensityHandler()
 {
-  double power;
-  modular_server_.parameter(digital_controller::constants::power_parameter_name).getValue(power);
+  double intensity;
+  modular_server_.parameter(digital_controller::constants::intensity_parameter_name).getValue(intensity);
 
-  setIrBacklightsOnAtPower(power);
+  setIrBacklightsOnAtIntensity(intensity);
 }
 
 void FlyBowlController::setIrBacklightsOnHandler(modular_server::Pin * pin_ptr)
@@ -760,12 +760,12 @@ void FlyBowlController::toggleIrBacklightsHandler(modular_server::Pin * pin_ptr)
   toggleIrBacklights();
 }
 
-void FlyBowlController::setVisibleBacklightsOnAtPowerHandler()
+void FlyBowlController::setVisibleBacklightsOnAtIntensityHandler()
 {
-  double power;
-  modular_server_.parameter(digital_controller::constants::power_parameter_name).getValue(power);
+  double intensity;
+  modular_server_.parameter(digital_controller::constants::intensity_parameter_name).getValue(intensity);
 
-  setVisibleBacklightsOnAtPower(power);
+  setVisibleBacklightsOnAtIntensity(intensity);
 }
 
 void FlyBowlController::setVisibleBacklightsOnHandler(modular_server::Pin * pin_ptr)
@@ -785,8 +785,8 @@ void FlyBowlController::toggleVisibleBacklightsHandler(modular_server::Pin * pin
 
 void FlyBowlController::addVisibleBacklightsPwmHandler()
 {
-  double power;
-  modular_server_.parameter(digital_controller::constants::power_parameter_name).getValue(power);
+  double intensity;
+  modular_server_.parameter(digital_controller::constants::intensity_parameter_name).getValue(intensity);
   long pulse_delay;
   modular_server_.parameter(constants::pulse_delay_parameter_name).getValue(pulse_delay);
   long pulse_period;
@@ -796,7 +796,7 @@ void FlyBowlController::addVisibleBacklightsPwmHandler()
   long pulse_count;
   modular_server_.parameter(constants::pulse_count_parameter_name).getValue(pulse_count);
 
-  digital_controller::constants::PwmId pwm_id = addVisibleBacklightsPwm(power,
+  digital_controller::constants::PwmId pwm_id = addVisibleBacklightsPwm(intensity,
     pulse_delay,
     pulse_period,
     pulse_on_duration,
@@ -806,8 +806,8 @@ void FlyBowlController::addVisibleBacklightsPwmHandler()
 
 void FlyBowlController::addExperimentStepHandler()
 {
-  double power;
-  modular_server_.parameter(digital_controller::constants::power_parameter_name).getValue(power);
+  double intensity;
+  modular_server_.parameter(digital_controller::constants::intensity_parameter_name).getValue(intensity);
   long pulse_period;
   modular_server_.parameter(constants::pulse_period_parameter_name).getValue(pulse_period);
   long pulse_on_duration;
@@ -823,7 +823,7 @@ void FlyBowlController::addExperimentStepHandler()
   double step_duration;
   modular_server_.parameter(constants::step_duration_parameter_name).getValue(step_duration);
 
-  int experiment_step_index = addExperimentStep(power,
+  int experiment_step_index = addExperimentStep(intensity,
     pulse_period,
     pulse_on_duration,
     pulse_count,
@@ -852,8 +852,8 @@ void FlyBowlController::getExperimentStepsHandler()
     constants::ExperimentStep & experiment_step = experiment_steps_[step_i];
     modular_server_.response().beginObject();
 
-    modular_server_.response().write(digital_controller::constants::power_parameter_name,
-      experiment_step.power);
+    modular_server_.response().write(digital_controller::constants::intensity_parameter_name,
+      experiment_step.intensity);
     modular_server_.response().write(constants::pulse_period_parameter_name,
       experiment_step.pulse_period);
     modular_server_.response().write(constants::pulse_on_duration_parameter_name,
@@ -917,8 +917,8 @@ void FlyBowlController::visibleBacklightStartPulseHandler(int pwm_index)
 {
   uint32_t visible_backlight_channels = pwm_infos_[pwm_index].visible_backlight_channels;
   visible_backlight_channels &= visible_backlights_enabled_mask_;
-  double power = pwm_infos_[pwm_index].power;
-  setChannelsOnAtPower(visible_backlight_channels,power);
+  double intensity = pwm_infos_[pwm_index].intensity;
+  setChannelsOnAtIntensity(visible_backlight_channels,intensity);
 
   uint32_t indicator_channels = pwm_infos_[pwm_index].indicator_channels;
   indicator_channels &= low_voltages_enabled_mask_;

@@ -28,33 +28,33 @@ public:
   FlyBowlController();
   virtual void setup();
 
-  void setIrBacklightOnAtPower(size_t fly_bowl,
-    double power);
+  void setIrBacklightOnAtIntensity(size_t fly_bowl,
+    double intensity);
   void setIrBacklightOn(size_t fly_bowl);
   void setIrBacklightOff(size_t fly_bowl);
   void toggleIrBacklight(size_t fly_bowl);
-  void setIrBacklightsOnAtPower(double power);
+  void setIrBacklightsOnAtIntensity(double intensity);
   void setIrBacklightsOn();
   void setIrBacklightsOff();
   void toggleIrBacklights();
 
-  void setVisibleBacklightOnAtPower(size_t fly_bowl,
-    double power);
+  void setVisibleBacklightOnAtIntensity(size_t fly_bowl,
+    double intensity);
   void setVisibleBacklightOn(size_t fly_bowl);
   void setVisibleBacklightOff(size_t fly_bowl);
   void toggleVisibleBacklight(size_t fly_bowl);
-  void setVisibleBacklightsOnAtPower(double power);
+  void setVisibleBacklightsOnAtIntensity(double intensity);
   void setVisibleBacklightsOn();
   void setVisibleBacklightsOff();
   void toggleVisibleBacklights();
 
-  digital_controller::constants::PwmId addVisibleBacklightsPwm(double power,
+  digital_controller::constants::PwmId addVisibleBacklightsPwm(double intensity,
     long pulse_delay,
     long pulse_period,
     long pulse_on_duration,
     long pulse_count);
 
-  int addExperimentStep(double power,
+  int addExperimentStep(double intensity,
     long pulse_period,
     long pulse_on_duration,
     long pulse_count,
@@ -105,11 +105,11 @@ private:
 
   // Handlers
   void setFlyBowlEnabledHandler(size_t fly_bowl);
-  void setIrBacklightsOnAtPowerHandler();
+  void setIrBacklightsOnAtIntensityHandler();
   void setIrBacklightsOnHandler(modular_server::Pin * pin_ptr);
   void setIrBacklightsOffHandler(modular_server::Pin * pin_ptr);
   void toggleIrBacklightsHandler(modular_server::Pin * pin_ptr);
-  void setVisibleBacklightsOnAtPowerHandler();
+  void setVisibleBacklightsOnAtIntensityHandler();
   void setVisibleBacklightsOnHandler(modular_server::Pin * pin_ptr);
   void setVisibleBacklightsOffHandler(modular_server::Pin * pin_ptr);
   void toggleVisibleBacklightsHandler(modular_server::Pin * pin_ptr);

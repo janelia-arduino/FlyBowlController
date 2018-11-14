@@ -34,13 +34,13 @@ extern const double fan_power_max;
 struct PwmInfo
 {
   uint32_t visible_backlight_channels;
-  double power;
+  double intensity;
   uint32_t indicator_channels;
 };
 
 struct ExperimentStep
 {
-  double power;
+  double intensity;
   long pulse_period;
   long pulse_on_duration;
   long pulse_count;
@@ -120,8 +120,8 @@ extern const double step_duration_min;
 extern const double step_duration_max;
 
 // Function
-extern ConstantString set_ir_backlights_on_at_power_function_name;
-extern ConstantString set_visible_backlights_on_at_power_function_name;
+extern ConstantString set_ir_backlights_on_at_intensity_function_name;
+extern ConstantString set_visible_backlights_on_at_intensity_function_name;
 extern ConstantString add_visible_backlights_pwm_function_name;
 extern ConstantString add_experiment_step_function_name;
 extern ConstantString get_experiment_steps_function_name;
