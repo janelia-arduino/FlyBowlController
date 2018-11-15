@@ -79,14 +79,7 @@ private:
   Array<fly_bowl_controller::constants::ExperimentStep,
     fly_bowl_controller::constants::EXPERIMENT_STEP_COUNT_MAX> experiment_steps_;
 
-  uint32_t ir_backlights_enabled_mask_;
-  uint32_t visible_backlights_enabled_mask_;
-  uint32_t high_voltages_enabled_mask_;
-  uint32_t low_voltages_enabled_mask_;
-
   fly_bowl_controller::constants::ExperimentStatus experiment_status_;
-
-  void initializeEnabledMasks();
 
   size_t getFlyBowlCount();
 

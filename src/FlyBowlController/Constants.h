@@ -31,13 +31,6 @@ extern const modular_server::FirmwareInfo firmware_info;
 extern const double fan_power_min;
 extern const double fan_power_max;
 
-struct PwmInfo
-{
-  uint32_t visible_backlight_channels;
-  double intensity;
-  uint32_t indicator_channels;
-};
-
 struct ExperimentStep
 {
   double intensity;
@@ -53,6 +46,11 @@ struct ExperimentStep
 enum
 {
   NO_EXPERIMENT_STEP_SPACE_LEFT_INDEX=-1,
+};
+
+struct PwmInfo
+{
+  double intensity;
 };
 
 struct ExperimentStatus
