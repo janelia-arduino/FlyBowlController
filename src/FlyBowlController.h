@@ -28,25 +28,31 @@ public:
   FlyBowlController();
   virtual void setup();
 
-  void setIrBacklightOnAtIntensity(size_t fly_bowl,
+  void setIrBacklightAndFanOnAtPower(size_t fly_bowl,
+    double power);
+  void setIrBacklightAndFanOnAtIntensity(size_t fly_bowl,
     double intensity);
-  void setIrBacklightOn(size_t fly_bowl);
-  void setIrBacklightOff(size_t fly_bowl);
-  void toggleIrBacklight(size_t fly_bowl);
-  void setIrBacklightsOnAtIntensity(double intensity);
-  void setIrBacklightsOn();
-  void setIrBacklightsOff();
-  void toggleIrBacklights();
+  void setIrBacklightAndFanOn(size_t fly_bowl);
+  void setIrBacklightAndFanOff(size_t fly_bowl);
+  void toggleIrBacklightAndFan(size_t fly_bowl);
+  void setIrBacklightsAndFansOnAtPower(double power);
+  void setIrBacklightsAndFansOnAtIntensity(double intensity);
+  void setIrBacklightsAndFansOn();
+  void setIrBacklightsAndFansOff();
+  void toggleIrBacklightsAndFans();
 
-  void setVisibleBacklightOnAtIntensity(size_t fly_bowl,
+  void setVisibleBacklightAndIndicatorOnAtPower(size_t fly_bowl,
+    double power);
+  void setVisibleBacklightAndIndicatorOnAtIntensity(size_t fly_bowl,
     double intensity);
-  void setVisibleBacklightOn(size_t fly_bowl);
-  void setVisibleBacklightOff(size_t fly_bowl);
+  void setVisibleBacklightAndIndicatorOn(size_t fly_bowl);
+  void setVisibleBacklightAndIndicatorOff(size_t fly_bowl);
   void toggleVisibleBacklight(size_t fly_bowl);
-  void setVisibleBacklightsOnAtIntensity(double intensity);
-  void setVisibleBacklightsOn();
-  void setVisibleBacklightsOff();
-  void toggleVisibleBacklights();
+  void setVisibleBacklightsAndIndicatorsOnAtPower(double power);
+  void setVisibleBacklightsAndIndicatorsOnAtIntensity(double intensity);
+  void setVisibleBacklightsAndIndicatorsOn();
+  void setVisibleBacklightsAndIndicatorsOff();
+  void toggleVisibleBacklightsAndIndicators();
 
   digital_controller::constants::PwmId addVisibleBacklightsPwm(double intensity,
     long pulse_delay,
@@ -98,14 +104,16 @@ private:
 
   // Handlers
   void setFlyBowlEnabledHandler(size_t fly_bowl);
-  void setIrBacklightsOnAtIntensityHandler();
-  void setIrBacklightsOnHandler(modular_server::Pin * pin_ptr);
-  void setIrBacklightsOffHandler(modular_server::Pin * pin_ptr);
-  void toggleIrBacklightsHandler(modular_server::Pin * pin_ptr);
-  void setVisibleBacklightsOnAtIntensityHandler();
-  void setVisibleBacklightsOnHandler(modular_server::Pin * pin_ptr);
-  void setVisibleBacklightsOffHandler(modular_server::Pin * pin_ptr);
-  void toggleVisibleBacklightsHandler(modular_server::Pin * pin_ptr);
+  void setIrBacklightsAndFansOnAtPowerHandler();
+  void setIrBacklightsAndFansOnAtIntensityHandler();
+  void setIrBacklightsAndFansOnHandler(modular_server::Pin * pin_ptr);
+  void setIrBacklightsAndFansOffHandler(modular_server::Pin * pin_ptr);
+  void toggleIrBacklightsAndFansHandler(modular_server::Pin * pin_ptr);
+  void setVisibleBacklightsAndIndicatorsOnAtPowerHandler();
+  void setVisibleBacklightsAndIndicatorsOnAtIntensityHandler();
+  void setVisibleBacklightsAndIndicatorsOnHandler(modular_server::Pin * pin_ptr);
+  void setVisibleBacklightsAndIndicatorsOffHandler(modular_server::Pin * pin_ptr);
+  void toggleVisibleBacklightsAndIndicatorsHandler(modular_server::Pin * pin_ptr);
   void addVisibleBacklightsPwmHandler();
   void addExperimentStepHandler();
   void getExperimentStepsHandler();
@@ -114,10 +122,10 @@ private:
   void runExperimentHandler(modular_server::Pin * pin_ptr);
   void stopExperimentHandler(modular_server::Pin * pin_ptr);
 
-  void visibleBacklightStartPulseHandler(int pwm_index);
-  void visibleBacklightStopPulseHandler(int pwm_index);
-  void visibleBacklightStartPwmHandler(int pwm_index);
-  void visibleBacklightStopPwmHandler(int pwm_index);
+  void visibleBacklightAndIndicatorStartPulseHandler(int pwm_index);
+  void visibleBacklightAndIndicatorStopPulseHandler(int pwm_index);
+  void visibleBacklightAndIndicatorStartPwmHandler(int pwm_index);
+  void visibleBacklightAndIndicatorStopPwmHandler(int pwm_index);
 
   void startSequenceHandler(int arg);
   void stopExperimentStepHandler(int arg);
