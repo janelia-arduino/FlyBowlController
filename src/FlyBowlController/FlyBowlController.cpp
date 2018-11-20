@@ -897,9 +897,6 @@ void FlyBowlController::visibleBacklightAndIndicatorStartPulseHandler(int pwm_in
       size_t fly_bowl_visible_backlight = constants::fly_bowl_visible_backlights[fly_bowl];
       double intensity = pwm_infos_[pwm_index].intensity;
       setVisibleBacklightAndIndicatorOnAtIntensity(fly_bowl_visible_backlight,intensity);
-
-      size_t indicator_low_voltage = constants::indicator_low_voltages[fly_bowl];
-      setLowVoltageOn(indicator_low_voltage);
     }
   }
 }
@@ -915,7 +912,7 @@ void FlyBowlController::visibleBacklightAndIndicatorStopPulseHandler(int pwm_ind
     if (fly_bowl_enabled)
     {
       size_t fly_bowl_visible_backlight = constants::fly_bowl_visible_backlights[fly_bowl];
-      setVisibleBacklightAndIndicatorOff(fly_bowl_visible_backlight);
+      setVisibleBacklightOff(fly_bowl_visible_backlight);
     }
   }
 }
@@ -936,9 +933,6 @@ void FlyBowlController::visibleBacklightAndIndicatorStopPwmHandler(int pwm_index
     {
       size_t fly_bowl_visible_backlight = constants::fly_bowl_visible_backlights[fly_bowl];
       setVisibleBacklightAndIndicatorOff(fly_bowl_visible_backlight);
-
-      size_t indicator_low_voltage = constants::indicator_low_voltages[fly_bowl];
-      setLowVoltageOff(indicator_low_voltage);
     }
   }
 
