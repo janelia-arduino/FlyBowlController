@@ -40,7 +40,7 @@ struct ExperimentStep
   long sequence_off_duration;
   long sequence_count;
   double step_delay;
-  double step_duration;
+  long step_duration;
 };
 
 enum
@@ -114,8 +114,8 @@ extern const double step_delay_min;
 extern const double step_delay_max;
 
 extern ConstantString step_duration_parameter_name;
-extern const double step_duration_min;
-extern const double step_duration_max;
+extern const long step_duration_min;
+extern const long step_duration_max;
 
 // Function
 extern ConstantString set_ir_backlights_and_fans_on_at_power_function_name;

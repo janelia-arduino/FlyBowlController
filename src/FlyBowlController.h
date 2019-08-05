@@ -67,7 +67,7 @@ public:
     long sequence_off_duration,
     long sequence_count,
     double step_delay,
-    double step_duration);
+    long step_duration);
 
   void removeAllExperimentSteps();
   void runExperiment();

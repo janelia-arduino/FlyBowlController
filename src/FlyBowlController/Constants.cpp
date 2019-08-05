@@ -19,9 +19,9 @@ CONSTANT_STRING(firmware_name,"FlyBowlController");
 const modular_server::FirmwareInfo firmware_info =
 {
   .name_ptr=&firmware_name,
-  .version_major=3,
+  .version_major=4,
   .version_minor=0,
-  .version_patch=1,
+  .version_patch=0,
 };
 
 const double fan_power_min = 100.0;
@@ -77,8 +77,8 @@ const double step_delay_min = 0.0;
 const double step_delay_max = 3600.0;
 
 CONSTANT_STRING(step_duration_parameter_name,"step_duration");
-const double step_duration_min = 1.0;
-const double step_duration_max = 86400.0;
+const long step_duration_min = 1000;
+const long step_duration_max = 86400000;
 
 // Function
 CONSTANT_STRING(set_ir_backlights_and_fans_on_at_power_function_name,"setIrBacklightsAndFansOnAtPower");
